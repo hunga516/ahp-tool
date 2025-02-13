@@ -1,0 +1,104 @@
+<template>
+
+    <div>
+        <table
+            class="matriz"
+            :name="idMatriz"
+            :ref="idMatriz"
+        >
+            <!-- Linha de título -->
+            <tr
+                class="linha-titulo"
+            >
+                <th></th>
+                <th
+                    class="th-titulo-linha"
+                    v-for="(item, optionIndex) in optionMatriz"
+                    :key="optionIndex"
+                >
+                    {{ item }}
+                </th>
+
+            </tr>
+            <!-- Demais linhas -->
+            <tr
+                v-for="(item, optionIndex) in optionMatriz"
+                :key="optionIndex"
+                class="linha-valores"
+            >
+                <th
+                    class="th-titulo-coluna"
+                >
+                    {{ item }}
+                </th>
+                <td
+                    v-for="(item, valueIndex) in valueMatriz[optionIndex]"
+                    :key="valueIndex"
+                    class="celulas-valores"
+                    :ref="`${optionIndex+1}${valueIndex+1}`"
+                    :id="`td-${optionIndex+1}${valueIndex+1}`"
+                >
+                    {{valueMatriz[optionIndex][valueIndex]>=1 ? valueMatriz[optionIndex][valueIndex].toFixed(0) : `1/${(1/valueMatriz[optionIndex][valueIndex]).toFixed(0)}`}}
+                </td>
+
+            </tr>
+
+        </table>
+    </div>
+</template>
+<script>
+export default {
+    name: "vue-matriz",
+    props: {
+        idMatriz: {
+            type: String,
+            default: ""
+        },
+        optionMatriz: {
+            type: Array, // Define o tipo esperado como um array
+            default: () => [] // Define um valor padrão como um array vazio
+        },
+        valueMatriz: {
+            type: Array, // Define o tipo esperado como um array
+            default: () => [
+                [1, 1, 1, 1],
+                [1, 1, 1, 1],
+                [1, 1, 1, 1],
+                [1, 1, 1, 1]
+            ] // Define um valor padrão como um array vazio
+        }
+    }
+}
+
+</script>
+<style scoped>
+
+    .matriz{
+        width: 100%;
+        height: 100%;
+    }
+
+    .matriz tr{
+        justify-content: space-evenly;
+    }
+    .matriz td{
+        min-width: 60px;
+        max-width: 100px;
+        text-align: center;
+        border: var(--borda-simples);
+        background-color: var(--cor-tema-alt);
+        color: var(--cor-texto-tema);
+    }
+    .th-titulo-coluna{
+        min-width: 60px;
+        max-width: 150px;
+        font-size: 12pt;
+        font-weight: bold;
+        text-align: left;
+    }
+    .th-titulo-linha{
+        font-size: 12pt;
+        font-weight: bold;
+        height: 50px;
+    }
+</style>

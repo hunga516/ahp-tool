@@ -1,0 +1,18 @@
+{
+  "devDependencies": {
+    "@vue/cli-service": "^5.0.8",
+    "eslint": "^8.50.0",
+    "eslint-plugin-vue": "^9.17.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "vue-meta": "^3.0.0-alpha.2",
+    "vue-router": "^4.2.5",
+    "vuex": "^4.0.2"
+  },
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  }
+}

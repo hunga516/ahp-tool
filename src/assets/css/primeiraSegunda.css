@@ -1,0 +1,48 @@
+
+
+/* Estilo da barra de rolagem */
+.section-direita::-webkit-scrollbar, .section-esquerda::-webkit-scrollbar  {
+    width: 5px; /* Largura da barra de rolagem */
+}
+
+/* Cor de fundo da barra de rolagem */
+.section-direita::-webkit-scrollbar-track, .section-esquerda::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Cor do indicador da barra de rolagem (a parte que você arrasta) */
+.section-direita::-webkit-scrollbar-thumb, .section-esquerda::-webkit-scrollbar-thumb {
+    background: var(--cor-tema);;
+    border-radius: 50px;
+}
+
+/* Hover sobre o indicador da barra de rolagem */
+.section-direita::-webkit-scrollbar-thumb:hover,.section-esquerda::-webkit-scrollbar-thumb:hover {
+    background: var(--cor-hover);
+}
+
+.container-esquerda{
+    display: flex;
+    flex-direction: column;
+    width: 98%;
+    height: 100%;
+}
+.container-direita{
+    /* margin-left: 100px; */
+    margin-bottom: 20px;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+}
+.container-matriz-vetor{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+.container-direita:hover{
+    cursor: pointer;
+}
+.container-vetor-cons{
+    display: flex;
+    gap: 2px;
+}

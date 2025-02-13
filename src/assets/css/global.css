@@ -1,0 +1,74 @@
+*{
+    --borda-simples: 1pt solid black;
+    caret-color: transparent;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+input, textarea {
+    caret-color: black !important;
+}
+
+h3{
+    text-align: center;
+}
+h2{
+    text-align: center;
+}
+body{
+    overflow-x: hidden;
+}
+main {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 98%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    border: var(--borda-simples);
+    border-radius: 20px;
+    /* min-height: 700px; */
+    overflow: hidden;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+}
+.container-tabview{
+    box-sizing: border-box;
+    display: flex;
+    width: 100%;
+}
+.section-direita{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* padding-bottom: 15%; */
+    box-sizing: border-box;
+    min-height: 600px;
+    max-height: 600px;
+}
+.section-esquerda{
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    border-right: var(--borda-simples);
+    box-sizing: border-box;
+    padding-left: 1%;
+    /* padding-bottom: 5%; */
+    overflow-y: scroll;
+    min-width: 150px;
+    min-height: 600px;
+    max-height: 600px;
+}
+
+.button-import {
+    border: var(--borda-simples);
+    border-radius: 20px;
+    font-size: 10pt;
+    background-color: var(--cor-tema-alt);
+    color: var(--cor-texto-tema);
+}
+.button-import:hover {
+    cursor: pointer;
+    box-shadow: 0 0 10px var(--cor-tema);
+}
