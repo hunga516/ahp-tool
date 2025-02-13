@@ -77,8 +77,8 @@ This project is licensed under the MIT License - see the LICENSE file for more d
 
 ## Related Works
 
-1. **Campos, H., Cardoso, F., Petter, C., & Petter, R.** (2025). _Mafmine: Mining Method Selection (Version 1.0.0)_ [Computer software]. Zenodo. DOI: [10.5281/zenodo.14816455](https://doi.org/10.5281/zenodo.14816455). GitHub repository: [Mafmine MAS](https://github.com/higorjsc/mafmine_mas).
+1. **Campos, H., Cardoso, F., Petter, C., & Petter, R.** (2025). _Mafmine: Mining Method Selection (Version 1.0.0)_ [Computer software]. Zenodo. DOI: [10.5281/zenodo.14816455](https://doi.org/10.5281/zenodo.14816455). GitHub repository: [Mafmine MMS](https://github.com/higorjsc/mafmine_mms).
 
-2. **Campos, H., Cardoso, F., Petter, C., & Petter, R.** (2025). _Mafmine: Mining Method Selection (Version 1.0.0)_ [Computer software]. Zenodo. DOI: [10.5281/zenodo.14816455](https://doi.org/10.5281/zenodo.14816455). GitHub repository: [Mafmine MMS](https://github.com/higorjsc/mafmine_mms).
+2. **Campos, H., Cardoso, F., Petter, C., & Petter, R.** (2025). _Mafmine: Selection of Mine Acess for Underground Mining (Version 2.0.0)_ [Computer software]. Zenodo. DOI: [10.5281/zenodo.14825336](https://doi.org/10.5281/zenodo.14825336). GitHub repository: [Mafmine MAS](https://github.com/higorjsc/mafmine_mas).
 
 3. **Campos, H. J. S., Cardozo, F. A. C., Otávio, P. C., & Lenz, V. M.** (2024, September). _Development of an Application for the Selection of Mining Methods for Conceptual Mining Projects_. Paper presented at the 23rd Mining Seminar. DOI: [10.5151/2594-357X-40715](https://doi.org/10.5151/2594-357X-40715). 
