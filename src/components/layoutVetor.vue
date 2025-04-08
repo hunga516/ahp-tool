@@ -41,8 +41,8 @@ export default {
             default: ""
         },
         valueVetor: {
-            type: Array, // Define o tipo esperado como um array
-            default: () => [1, 1, 1, 1] // Define um valor padrão como um array vazio
+            type: Array,
+            default: () => [1, 1, 1, 1]
         }
     },
     data() {
@@ -70,14 +70,17 @@ export default {
         min-width: 60px;
         max-width: 60px;
         text-align: center;
-        background-color: var(--cor-tema-alt);
-        color: var(--cor-texto-tema);
-        border: var(--borda-simples);
+        background-color: #2195ff;
+        color: white;
     }
     .th-titulo-vetor{
         font-size: 12pt;
         font-weight: bold;
         height: 50px;
+    }
+
+    .celulas-valores{
+        background-color: #2195ff;
     }
 
 </style>

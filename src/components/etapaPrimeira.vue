@@ -2,11 +2,9 @@
 <template>
     <vueMenuAhp/>
 
-    <!-- SEÇÃO DOS INPUTS -->
     <section
         class="section-esquerda"
     >
-        <!-- Titulo matriz em edição -->
         <h3>
             {{ matrizAtual }}
         </h3>

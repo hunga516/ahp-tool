@@ -111,9 +111,9 @@ export default {
                 left = valor
             }
             this.$refs.slider.style.background = "linear-gradient(90deg,"
-            + `var(--cor-tema) 0%, white ${left}%,`
-            + `var(--cor-tema) ${meioStart}%, var(--cor-tema) ${meioEnd}%,`
-            + `white ${right}%, var(--cor-tema) 100%)`
+            + `#3d88fc 0%, white ${left}%,`
+            + `#3d88fc ${meioStart}%, #3d88fc ${meioEnd}%,`
+            + `white ${right}%, #3d88fc 100%)`
 
             // linear-gradient(90deg, var(--cor-tema) 0%, white ${left}%, var(--cor-tema) ${meioStart}%, var(--cor-tema) ${meioEnd}%, white ${right}%, var(--cor-tema) 100%)`
             // this.$refs.slider.style.background = "linear-gradient(90deg," + "red 0%," + "red " + left + "%, " + "var(--cor-hover)" + meioStart + "%," + "var(--cor-hover)" + meioEnd + "%, " + "blue " + right + "%," + "blue " + "100" + "%  )"
@@ -177,7 +177,7 @@ input {
   height: 6px;
   border-radius: 50px;
   opacity: 0.7;
-  background: linear-gradient(90deg, var(--cor-tema) 0%, white 50%, var(--cor-tema) 50%, var(--cor-tema) 50%, white 35%, var(--cor-tema) 100%);
+  background: linear-gradient(90deg,#3d88fc  0%, white 50%, white 35%, #3d88fc 100%);
   border: 1pt solid black;
   appearance: none;
   outline: none;
@@ -189,7 +189,7 @@ input {
 input:hover{
     background-color: red;
     transform: scale(1.01);
-    box-shadow: 0 0 5px var(--cor-tema);
+    box-shadow: 0 0 5px #a4c8ff ;
     cursor: pointer;
 }
 
@@ -199,8 +199,7 @@ input::-webkit-slider-thumb {
   width: 15px;
   height:15px;
   border-radius: 50%;
-  background: var(--cor-tema);
-  border: var(--borda-simples) ;
+  background: #0065fe;
   cursor: pointer;
   z-index: 6;
 }

@@ -6,22 +6,18 @@
         <div
             class="container-criterios"
         >
-            <h2>
-                {{ $t('mcdmTituloCriterios') }}
-            </h2>
-
             <div
                 class="label-container"
             >
                 <label
                     class="label-simbolo"
                 >
-                    {{ $t('inputSimboloLabel') }}
+                    Vết tắt
                 </label>
                 <label
                     class="label-nome"
                 >
-                    {{ $t('inputNomeLabelCriterios') }}
+                    Nhập vào tên của tiêu chí
                 </label>
             </div>
 
@@ -30,11 +26,6 @@
                 :key="index"
                 class="label-criterios"
             >
-                <label
-                    class="criterio-option-index"
-                >
-                    {{ index+1 }} - &ensp;
-                </label>
                 <input
                     class="simbolo-criterios input-simbolo"
                     v-model="criteriosSimboloPrimeira[index]"
@@ -61,34 +52,28 @@
             </div>
         </div>
 
-        <!-- OPÇÕES E BOTÕES DE ADICIONAR OPÇÕES -->
         <div
             class="container-options"
         >
-            <h2>
-                {{ $t('mcdmTituloOptions') }}
-            </h2>
             <div
                 class="label-container"
             >
                 <label
                     class="label-simbolo"
                 >
-                    {{ $t('inputSimboloLabel') }}
+                   Viết tắt
                 </label>
                 <label
                     class="label-nome"
                 >
-                    {{ $t('inputNomeLabelOptions') }}
+                    Nhập vào tên của phương án
                 </label>
             </div>
             <div
                 v-for="(item, index) in optionsLabelPrimeira"
                 :key="index"
+                class="label-criterios"
             >
-                <label>
-                    {{ index+1 }} - &ensp;
-                </label>
                 <input
                     class="simbolo-criterios input-simbolo"
                     v-model="optionsSimboloPrimeira[index]"
@@ -137,10 +122,10 @@ export default {
     data() {
         return {
             optionsLabelPrimeira: [
-                "Option-1",
-                "Option-2",
-                "Option-3",
-                "Option-4"
+                "Phương án 1",
+                "Phương án 2",
+                "Phương án 3",
+                "Phương án 4"
             ],
             optionsSimboloPrimeira: [
                 "O1",
@@ -149,16 +134,16 @@ export default {
                 "O4"
             ],
             criteriosLabelPrimeira: [
-                "Criterion-1",
-                "Criterion-2",
-                "Criterion-3",
-                "Criterion-4"
+                "Tiêu chí 1",
+                "Tiêu chí 2",
+                "Tiêu chí 3",
+                "Tiêu chí 4"
             ],
             criteriosSimboloPrimeira: [
-                "C1",
-                "C2",
-                "C3",
-                "C4"
+                "TC1",
+                "TC2",
+                "TC3",
+                "TC4"
             ]
         }
     },
@@ -272,7 +257,7 @@ export default {
         max-height: 600px;
     }
     .container-options, .container-criterios{
-        width: 50%;
+        width: 70%;
         display: flex;
         flex-direction: column;
         margin-bottom: 40px;
@@ -282,48 +267,63 @@ export default {
         max-height: 25px;
     }
 
+    .simbolo-criterios{
+        border-radius: 2px;
+    }
+
+    .label-container{
+        column-gap: 110px;
+        margin-top: 80px;
+    }
+
     .criterio-option-index{
         width: 3%;
     }
+
+    .label-criterios{
+        column-gap: 10px;
+        margin-top: 10px;
+    }
+
     .input-simbolo{
-        border-radius: 20px;
+        border-radius: 10px;
         text-align: center;
         width: 20%;
+        border: 1px solid #434343;
     }
     .input-label{
-        border-radius: 20px;
+        padding: 12px;
+        border-radius: 4px;
         text-align: center;
         width: 60%;
     }
 
     .label-simbolo{
-        width: 26%;
+
+    }
+    .input-criterios input-label{
+
     }
     .label-nome{
         width:57%;
     }
 
     .label-nome, .label-simbolo{
-        font-weight: bold;
-        text-align: center;
+        font-weight: 600;
+        text-align: left;
     }
     .remove-button, .add-button{
         display: flex;
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        height: 18px;
-        width: 18px;
-        border: var(--borda-simples);
-        border-radius: 50%;
+        height: 25px;
+        width: 25px;
+        border-radius: 20%;
+        border: none;
         transform: translateY(1px);
         font-size: 12pt;
-        background-color: var(--cor-tema-alt);
-        color: var(--cor-texto-tema);
+        background-color: #93bbf7;
+        color: white;
     }
-    .add-button:hover, .remove-button:hover {
-        cursor: pointer;
-        box-shadow: 0 0 10px var(--cor-tema);
-    }
-
 </style>

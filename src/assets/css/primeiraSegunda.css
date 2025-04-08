@@ -12,8 +12,8 @@
 
 /* Cor do indicador da barra de rolagem (a parte que você arrasta) */
 .section-direita::-webkit-scrollbar-thumb, .section-esquerda::-webkit-scrollbar-thumb {
-    background: var(--cor-tema);;
-    border-radius: 50px;
+    background: #cdcdcd;
+    border-radius: 25px;
 }
 
 /* Hover sobre o indicador da barra de rolagem */

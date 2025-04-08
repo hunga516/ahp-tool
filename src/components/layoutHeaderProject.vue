@@ -95,7 +95,8 @@ export default {
         user-select: none;
         height: 100%;
         width: calc(100%/3);
-        background-color: var(--cor-tema);
+        background-color: #3d88fc;
+        font-weight: 600;
         opacity: 0.9;
         z-index: 2;
         overflow: hidden !important;

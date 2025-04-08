@@ -3,19 +3,9 @@
     <header
         class="header-container"
     >
-        <img
-            class='mining-symbol'
-            src="@\assets\Imagens\mining_symbol.png"
-            alt="Simbolo da mineração"
-        >
         <h1 class="titulo-pagina">
-            {{ $t(`pageTitulo`) }}
+            Nhóm 2 CNPM2 AHP TOOL
         </h1>
-        <img
-            class='mining-symbol'
-            src="@\assets\Imagens\mining_symbol.png"
-            alt="Simbolo da mineração"
-        >
     </header>
 </template>
 <script>
@@ -29,15 +19,21 @@ export default {
 }
 header{
     display: flex;
-    background-color: var(--cor-tema);
-    border-radius: 30px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #3d88fc;
+    border-radius: 15px;
     width: 98%;
-    color: var(--cor-texto-tema);
+    color: white;
     justify-content: space-between;
     align-items: center;
     padding-inline: 1%;
     box-sizing: border-box;
-    border: var(--borda-simples);
+}
+
+h1{
+    margin: auto;
+    padding: 10px;
 }
 
 @media (max-width:800px) {

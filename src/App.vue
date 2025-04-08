@@ -1,20 +1,15 @@
 <template>
     <div id="body" ref="app">
         <metainfo>
-            <template v-slot:title="{ content }">
-                {{ content ? `${content} | AHP Tool` : 'AHP Decision Tool' }}
+            <template>
+                AHP TOOL Nhóm 2
             </template>
         </metainfo>
-
-        <vueHeader/>
-
         <main>
             <vueHeaderProject class="header-mcdm"/>
             <vueButtonSwitchLanguage/>
             <RouterView/>
         </main>
-
-        <vueFooter/>
         <vuePopUp/>
     </div>
 </template>
@@ -35,7 +30,6 @@ export default {
         vueHeader,
         vueHeaderProject,
         vueFooter,
-        vueButtonSwitchLanguage,
         vuePopUp
     },
     setup() {

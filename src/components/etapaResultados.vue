@@ -194,9 +194,8 @@ export default {
 .matriz-resultados td, .vetor-resultado td{
     width: 90px;
     text-align: center;
-    border: var(--borda-simples);
-    background-color: var(--cor-tema-alt);
-    color: var(--cor-texto-tema);
+    background-color: #2195ff;
+    color: white;
 }
 .th-titulo-coluna{
     width: 10%;

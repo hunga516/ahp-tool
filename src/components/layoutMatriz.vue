@@ -72,7 +72,6 @@ export default {
 
 </script>
 <style scoped>
-
     .matriz{
         width: 100%;
         height: 100%;
@@ -85,9 +84,8 @@ export default {
         min-width: 60px;
         max-width: 100px;
         text-align: center;
-        border: var(--borda-simples);
-        background-color: var(--cor-tema-alt);
-        color: var(--cor-texto-tema);
+        background-color: #2195ff;
+        color: white;
     }
     .th-titulo-coluna{
         min-width: 60px;
@@ -100,5 +98,8 @@ export default {
         font-size: 12pt;
         font-weight: bold;
         height: 50px;
+    }
+    .celulas-valores{
+        background-color: #2195ff;
     }
 </style>

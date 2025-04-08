@@ -35,11 +35,11 @@ const CORES = {
 
 const TEMAS = {
     temaVermelho: {
-        HoverColor: "#300202d6",
-        mainColor: "#650505d6",
+        HoverColor: "#2195ff",
+        mainColor: "#2195ff",
         altColor: "#A72525",
         shadowInput: "-5px 0 5px  rgb(0 0 0 / 95%",
-        shadowHover: "0 0 10px #650505d6",
+        shadowHover: "0 0 10px #2195ff",
         textColor: "white"
     },
     temaAzulClassico: {
