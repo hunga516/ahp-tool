@@ -1,75 +1,37 @@
-
 <template>
-    <vueMenuAhp/>
+    <vueMenuAhp />
 
-    <section
-        class="section-esquerda"
-    >
+    <section class="section-esquerda">
         <h3>
             {{ matrizAtual }}
         </h3>
 
-        <div
-            v-for="(itemParent, indexParent) in criteriosPrimeira"
-            :key="indexParent"
-        >
-            <div
-                v-if="itemParent === matrizAtual"
-                class="container-esquerda"
-            >
-                <vueButtonSlider
-                    v-for="(itemChildren, indexChildren) in sliderStore[0]"
-                    :key="indexChildren"
-                    :id="`${indexChildren}`"
-                    :classe="`${indexParent}`"
-                    :name="`slider-${indexParent+1}-${indexChildren+2}`"
-                    :texto="itemChildren.texto"
-                    :valor="sliderStore[indexParent][indexChildren].valor"
-                    @slider-value="handleInputValue"
-                />
+        <div v-for="(itemParent, indexParent) in criteriosPrimeira" :key="indexParent">
+            <div v-if="itemParent === matrizAtual" class="container-esquerda">
+                <vueButtonSlider v-for="(itemChildren, indexChildren) in sliderStore[0]" :key="indexChildren"
+                    :id="`${indexChildren}`" :classe="`${indexParent}`"
+                    :name="`slider-${indexParent + 1}-${indexChildren + 2}`" :texto="itemChildren.texto"
+                    :valor="sliderStore[indexParent][indexChildren].valor" @slider-value="handleInputValue" />
             </div>
 
         </div>
     </section>
 
     <!-- SEÇÃO DAS MATRIZES -->
-    <section
-        class="section-direita section-direita-primeira"
-    >
-        <div
-            class="container-direita"
-            v-for="(itemCriterio, indexMatriz) in criteriosPrimeira"
-            :key="indexMatriz"
-        >
+    <section class="section-direita section-direita-primeira">
+        <div class="container-direita" v-for="(itemCriterio, indexMatriz) in criteriosPrimeira" :key="indexMatriz">
             <h3>
                 {{ itemCriterio }}
             </h3>
 
-            <div
-                class="container-matriz-vetor"
-                id="matriz"
-            >
-                <vueMatriz
-                    :idMatriz="itemCriterio"
-                    :optionMatriz="optionsPrimeira"
-                    :valueMatriz="matrizValores[indexMatriz]"
-                    @click="trocaMatrizInputAtual(itemCriterio)"
-                />
-                <div
-                    class="container-vetor-cons"
-                >
-                    <vueVetor
-                        tituloVetor="Peso"
-                        :idVetor="itemCriterio"
-                        :valueVetor="vetorPeso(indexMatriz)"
-                        @click="trocaMatrizInputAtual(itemCriterio)"
-                    />
-                    <vueConsistencia
-                        :RI="consistencia(indexMatriz, 'ri')"
-                        :CI="consistencia(indexMatriz, 'ci')"
-                        :CR="consistencia(indexMatriz, 'cr')"
-                        :lambda="consistencia(indexMatriz, 'lambda')"
-                    />
+            <div class="container-matriz-vetor" id="matriz">
+                <vueMatriz :idMatriz="itemCriterio" :optionMatriz="optionsPrimeira"
+                    :valueMatriz="matrizValores[indexMatriz]" @click="trocaMatrizInputAtual(itemCriterio)" />
+                <div class="container-vetor-cons">
+                    <vueVetor tituloVetor="Criteria Weight" :idVetor="itemCriterio" :valueVetor="vetorPeso(indexMatriz)"
+                        @click="trocaMatrizInputAtual(itemCriterio)" />
+                    <vueConsistencia :RI="consistencia(indexMatriz, 'ri')" :CI="consistencia(indexMatriz, 'ci')"
+                        :CR="consistencia(indexMatriz, 'cr')" :lambda="consistencia(indexMatriz, 'lambda')" />
                 </div>
             </div>
         </div>
@@ -97,7 +59,7 @@ export default {
         vueConsistencia,
         vueMenuAhp
     },
-    mixins:[
+    mixins: [
         functionsAhpMixin,
         saveProjectMixin
     ],
@@ -149,6 +111,7 @@ export default {
             this.$store.dispatch("changeMatrizInputAtual", matrizName)
             this.$store.dispatch("changeSlideresPrimeira", this.sliderStore)
             this.changeMatrixColor(matrizName)
+
             setTimeout(() => {
                 this.hoverSlider("primeira")
             }, 200)
@@ -316,9 +279,58 @@ export default {
 }
 </script>
 <style scoped>
-.section-direita-primeira{
+.section-direita-primeira {
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
+    padding: 2rem;
+    background: white;
+    max-height: 800px;
 }
 
+/* Style cho container bên trong */
+.container-direita {
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.2s ease;
+}
+
+.container-direita:hover {
+    border-color: #000;
+}
+
+/* Style cho tiêu đề */
+.container-direita h3 {
+    font-size: 1.25rem;
+    color: #000000;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+}
+
+/* Style cho container matrix và vector */
+.container-matriz-vetor {
+    display: flex;
+    gap: 1.5rem;
+}
+
+/* Custom scrollbar */
+.section-direita-primeira::-webkit-scrollbar {
+    width: 8px;
+}
+
+.section-direita-primeira::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.section-direita-primeira::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.section-direita-primeira::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
 </style>

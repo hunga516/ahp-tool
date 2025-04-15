@@ -2,58 +2,28 @@ egunda
 <template>
 
     <!-- SEÇÃO DOS INPUTS -->
-    <section
-        class="section-esquerda section-esquerda-segunda"
-    >
+    <section class="section-esquerda section-esquerda-segunda">
 
-        <div
-            class="container-esquerda"
-        >
-            <vueButtonSlider
-                v-for="(itemChildren, indexChildren) in sliderStore"
-                :key="indexChildren"
-                :id="`${indexChildren}`"
-                classe="0"
-                :name="`slider-0-${indexChildren+2}`"
-                :texto="itemChildren.texto"
-                :valor="sliderStore[indexChildren].valor"
-                @slider-value="handleInputValue"
-            />
+        <div class="container-esquerda">
+            <vueButtonSlider v-for="(itemChildren, indexChildren) in sliderStore" :key="indexChildren"
+                :id="`${indexChildren}`" classe="0" :name="`slider-0-${indexChildren + 2}`" :texto="itemChildren.texto"
+                :valor="sliderStore[indexChildren].valor" @slider-value="handleInputValue" />
         </div>
 
     </section>
 
-    <!-- SEÇÃO DAS MATRIZES -->
-    <section
-        class="section-direita section-direita-segunda"
-    >
-        <vueMenuAhp/>
-        <div
-            class="container-direita"
-        >
+    <section class="section-direita section-direita-segunda">
+        <div class="container-direita">
             <h3>
                 {{ $t('tituloMatrizSegundaEtapaAhp') }}
             </h3>
 
-            <div
-                class="container-matriz-vetor"
-            >
-                <vueMatriz
-                    idMatriz="matriz-segunda-etapa"
-                    :optionMatriz="criteriosSegunda"
-                    :valueMatriz="matrizValores"
-                />
-                <vueVetor
-                    idVetor="matriz-segunda-etapa"
-                    tituloVetor="Peso"
-                    :valueVetor="vetorPeso()"
-                />
-                <vueConsistencia
-                    :RI="consistencia('ri')"
-                    :CI="consistencia('ci')"
-                    :CR="consistencia('cr')"
-                    :lambda="consistencia('lambda')"
-                />
+            <div class="container-matriz-vetor">
+                <vueMatriz idMatriz="matriz-segunda-etapa" :optionMatriz="criteriosSegunda"
+                    :valueMatriz="matrizValores" />
+                <vueVetor idVetor="matriz-segunda-etapa" tituloVetor="Criteria Weight" :valueVetor="vetorPeso()" />
+                <vueConsistencia :RI="consistencia('ri')" :CI="consistencia('ci')" :CR="consistencia('cr')"
+                    :lambda="consistencia('lambda')" />
             </div>
         </div>
     </section>
@@ -81,7 +51,7 @@ export default {
         vueConsistencia,
         vueMenuAhp
     },
-    mixins:[
+    mixins: [
         functionsAhpMixin,
         saveProjectMixin
     ],

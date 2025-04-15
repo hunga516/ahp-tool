@@ -2,9 +2,9 @@ import { createStore } from "vuex"
 
 export default createStore({
     state: {
-        language: "pt", // Idioma padrão
-        popUp: null, // popUp aberto (null = nenhum)
-        balao: "", // Variável de texto do balao help
+        language: "pt",
+        popUp: null,
+        balao: "",
         matrizInputAtual: "",
         slideresPrimeira: [],
         slideresSegunda: [],

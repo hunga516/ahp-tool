@@ -1,133 +1,182 @@
 <template>
-
-    <div class="etapas-container">
-        <span class="buttons-etapas" ref="span-inputs">
-            <a class="link" @click.prevent="handleLink(0,'/inputs')">INPUTS</a>
-        </span>
-
-        <span class="buttons-etapas" ref="span-primeira">
-            <a class="link" @click.prevent="handleLink(1,'/primeira')">{{ $t("step") }} 1</a>
-        </span>
-
-        <span class="buttons-etapas" ref="span-segunda">
-            <a class="link" @click.prevent="handleLink(2,'/segunda')">{{$t("step")}} 2</a>
-        </span>
-
-        <span class="buttons-etapas" ref="span-resultados">
-            <a class="link" @click.prevent="handleLink(3,'/resultados')">{{$t("resultados")}}</a>
-        </span>
+    <div class="stepper-container">
+        <div class="stepper">
+            <div class="step" v-for="(step, index) in steps" :key="index" :class="{
+                'active': index <= viewProgress,
+                'completed': index < viewProgress
+            }">
+                <div class="step-connector" v-if="index > 0"></div>
+                <div class="step-content" @click="handleLink(index, step.route)">
+                    <div class="step-circle">
+                        <span v-if="index < viewProgress" class="check-icon">✓</span>
+                        <span v-else>{{ index + 1 }}</span>
+                    </div>
+                    <div class="step-label">{{ step.label }}</div>
+                </div>
+            </div>
+        </div>
     </div>
-
 </template>
+
 <script>
 export default {
     name: "vue-mcdm-header",
-    computed:{
+    data() {
+        return {
+            steps: [
+                { label: 'INPUTS', route: '/inputs' },
+                { label: this.$t("step") + ' 1', route: '/primeira' },
+                { label: this.$t("step") + ' 2', route: '/segunda' },
+                { label: this.$t("resultados"), route: '/resultados' }
+            ]
+        }
+    },
+    computed: {
         viewProgress() {
-            return this.$store.getters.currentViewProgress
+            return this.$store.getters.currentViewProgress - 1 // Để index bắt đầu từ 0
         }
     },
     mounted() {
-        this.changeTabOpacity()
-        this.changeAtualTab("/inputs")
         this.$router.replace({ path: "/inputs" })
     },
     created() {
         this.$store.dispatch("changeViewProgress", 1)
     },
     methods: {
-        handleTemplate() {
-            this.changeTabOpacity()
-            this.changeAtualTab("/inputs")
-        },
-        changeTabOpacity() {
-            document.querySelectorAll(".buttons-etapas").forEach((element) => {
-                element.style.opacity = 0.6
-            })
-            const span = document.querySelector(".etapas-container").querySelectorAll("span")
-            for(let i = 0; (i <= this.viewProgress && i < 4); i++) {
-                span[i].style.opacity = 0.85
-            }
-        },
-        changeAtualTab(atual) {
-            this.$store.dispatch("changeTabViewAtual", atual)
-            atual = "span-" + atual.split("/")[1]
-            this.$refs[atual].style.opacity = 1
-        },
         handleLink(index, route) {
-            if(this.viewProgress > index) {
-                this.changeTabOpacity()
-                this.changeAtualTab(route)
-                this.$router.replace({ path: `${route}` })
-            }else if(this.viewProgress === index) {
-                this.$store.dispatch("changeViewProgress", this.viewProgress + 1)
-                this.changeTabOpacity()
-                this.changeAtualTab(route)
-                this.$router.replace({ path: `${route}` })
+            if (this.viewProgress >= index) {
+                this.$store.dispatch("changeTabViewAtual", route)
+                this.$router.replace({ path: route })
+            } else if (this.viewProgress + 1 === index) {
+                this.$store.dispatch("changeViewProgress", index + 1)
+                this.$store.dispatch("changeTabViewAtual", route)
+                this.$router.replace({ path: route })
             }
-            // console.log(this.viewProgress)
-            // console.log(route)
-
         }
     }
 }
-
 </script>
 
 <style scoped>
-    .etapas-container{
-        display: flex;
-        align-items: center;
-        position: relative;
-        width: 100%;
-        max-width: 100%;
-        height: 100%;
-        max-height: 305px;
-        border-bottom: var(--borda-simples);
-        border-top-left-radius: 20px;
-        border-top-right-radius: 20px;
-        box-sizing: border-box;
-        overflow: hidden !important;
-        user-select: none;
+.stepper-container {
+    padding: 2rem;
+    background: white;
+    border-bottom: 1px solid #eee;
+}
+
+.stepper {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+
+.step {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.step-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+}
+
+.step-circle {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+.step-label {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.step-connector {
+    position: absolute;
+    left: calc(-50% + 17.5px);
+    right: calc(50% - 17.5px);
+    height: 2px;
+    background: #ddd;
+    z-index: 1;
+    transition: all 0.3s ease;
+    top: 17.5px;
+}
+
+/* Active state */
+.step.active .step-circle {
+    border-color: #000;
+    color: #000;
+}
+
+.step.active .step-label {
+    color: #000;
+}
+
+/* Completed state */
+.step.completed .step-circle {
+    background: #000;
+    border-color: #000;
+    color: white;
+}
+
+.step.completed .step-connector {
+    background: #000;
+}
+
+/* Hover effects */
+.step:not(.completed):hover .step-circle {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.check-icon {
+    font-size: 1rem;
+}
+
+/* Disabled state */
+.step:not(.active) {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+    .stepper-container {
+        padding: 1rem;
     }
 
-    .buttons-etapas{
-        user-select: none;
-        height: 100%;
-        width: calc(100%/3);
-        background-color: #3d88fc;
-        font-weight: 600;
-        opacity: 0.9;
-        z-index: 2;
-        overflow: hidden !important;
-    }
-    .buttons-etapas:hover{
-        opacity: 1;
-        overflow: hidden !important;
-
+    .step-label {
+        font-size: 0.8rem;
     }
 
-    #first-etapa{
-        border-right: 2pt solid white;
-    }
-    #secound-etapa{
-        border-right: 2pt solid white;
-    }
-    .link{
-        color: var(--cor-texto-tema);
-        z-index: 1;
-        text-decoration: none;
-        user-select: none;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden !important;
-
-    }
-    .link:hover{
-        cursor: pointer;
+    .step-circle {
+        width: 30px;
+        height: 30px;
     }
 
+    .step-connector {
+        left: calc(-50% + 15px);
+        right: calc(50% - 15px);
+        top: 15px;
+    }
+}
 </style>

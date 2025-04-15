@@ -33,13 +33,11 @@ export default {
         vuePopUp
     },
     setup() {
-        // Dados reativos com valores iniciais
         const pageTitle = ref("Analytical Hierarchy Process")
         const pageDescription = ref("Web-based AHP method implementation for multi-criteria decision analysis")
         const pageKeywords = ref("AHP, MCDM, Decision Making, Analytic Hierarchy Process, Vue.js")
         const pageImageUrl = ref("https://yourdomain.com/images/ahp-preview.jpg") // URL absoluto
 
-        // Configuração reativa das meta tags
         useMeta({
             title: pageTitle.value,
             meta: [
@@ -60,7 +58,6 @@ export default {
         })
 
         return {
-            // Apenas retorne se for usar no template
             pageTitle,
             pageDescription,
             pageImageUrl

@@ -1,33 +1,18 @@
 <template>
 
     <div class="buttons-container">
-        <button
-            class="project-button"
-            v-if="!continueFlag && !importFlag && tabView == '/inputs'"
-            @click="importProject('local')"
-        >
+        <button class="project-button" v-if="!continueFlag && !importFlag && tabView == '/inputs'"
+            @click="importProject('local')">
             {{ $t("continueProject") }}
         </button>
-        <button
-            v-if="tabView == '/inputs'"
-            class="project-button"
-            @click="importProject('json')"
-        >
-            {{$t("importProject")}}
+        <button v-if="tabView == '/inputs'" class="project-button" @click="importProject('json')">
+            {{ $t("importProject") }}
         </button>
-        <button
-            v-if="tabView == '/inputs'"
-            class="project-button"
-            @click="resetProject()"
-        >
-            {{$t("resetProject")}}
+        <button v-if="tabView == '/inputs'" class="project-button" @click="resetProject()">
+            {{ $t("resetProject") }}
         </button>
-        <button
-            v-if="tabView == '/resultados'"
-            @click="exportObjectAsJSON()"
-            class="project-button"
-        >
-            {{$t("exportProject")}}
+        <button v-if="tabView == '/resultados'" @click="exportObjectAsJSON()" class="project-button">
+            {{ $t("exportProject") }}
         </button>
     </div>
 
@@ -40,7 +25,7 @@ import saveProjectMixin from "./mixins/saveProject.vue"
 
 export default {
     name: "vue-project-buttons",
-    mixins:[
+    mixins: [
         saveProjectMixin
     ],
     emits: ["update-view"],
@@ -49,7 +34,7 @@ export default {
             project: {}
         }
     },
-    computed:{
+    computed: {
         importFlag() {
             return this.$store.getters.currentImportFlag
         },
@@ -60,7 +45,7 @@ export default {
             return this.$store.getters.currentTabViewAtual
         }
     },
-    methods:{
+    methods: {
         async importJSONAsObject() {
             try {
                 const [fileHandle] = await window.showOpenFilePicker({
@@ -149,12 +134,12 @@ export default {
         },
         async importProject(store) {
 
-            if(store == "json") {
+            if (store == "json") {
                 console.log("Importing from json file...")
                 this.project = await this.importJSONAsObject()
             }
 
-            if(store == "local") {
+            if (store == "local") {
                 console.log("Importing from local store")
                 this.project = JSON.parse(verificarLocal("last_project"))
             }
@@ -187,43 +172,91 @@ export default {
 }
 </script>
 <style>
-.buttons-container{
+.buttons-container {
     position: absolute;
-    top: 6%;
-    left: 1%;
+    top: 2rem;
+    left: 2rem;
     display: flex;
-    align-items: center;
-    column-gap: 4px;
+    gap: 1rem;
+    z-index: 10;
 }
 
 .project-button {
-    border-radius: 12px;
-    padding: 2px;
-    padding-left: 12px;
-    padding-right: 12px;
-    border: none;
-    font-size: 10pt;
-    background-color: #3d88fc;
-    color: var(--cor-texto-tema);
-    margin-left: 1px;
-}
-
-.button-export {
-    position: absolute;
-    bottom: 2%;
-    right: 1%;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    border: 1px solid #000;
+    background: white;
+    color: #000;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    align-content: center;
-    flex-wrap: wrap-reverse;
-    border: var(--borda-simples);
-    border-radius: 20px;
-    font-size: 10pt;
-    background-color: var(--cor-tema-alt);
-    color: var(--cor-texto-tema);
+    gap: 0.5rem;
 }
-.button-export:hover {
-    cursor: pointer;
-    box-shadow: 0 0 10px var(--cor-tema);
+
+/* Style cho nút Continue Project */
+.project-button:nth-child(1) {
+    background: #000;
+    color: white;
+}
+
+.project-button:nth-child(1):hover {
+    background: #333;
+    transform: translateY(-1px);
+}
+
+/* Style cho nút Import Project */
+.project-button:nth-child(2) {
+    background: white;
+}
+
+.project-button:nth-child(2):hover {
+    background: #f8f8f8;
+    transform: translateY(-1px);
+}
+
+/* Style cho nút Reset Project */
+.project-button:nth-child(3) {
+    border-color: #ff4757;
+    color: #ff4757;
+    background: white;
+}
+
+.project-button:nth-child(3):hover {
+    background: #fff5f5;
+    transform: translateY(-1px);
+}
+
+/* Style cho nút Export Project */
+.project-button:nth-child(4) {
+    background: white;
+    border-color: #000;
+}
+
+.project-button:nth-child(4):hover {
+    background: #f8f8f8;
+    transform: translateY(-1px);
+}
+
+/* Active state cho tất cả các nút */
+.project-button:active {
+    transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .buttons-container {
+        position: static;
+        padding: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .project-button {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+    }
 }
 </style>
