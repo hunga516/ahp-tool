@@ -29,19 +29,39 @@ ChartJS.register(
 export default {
   name: 'BarChart',
   components: { Bar },
-  data() {
-    return {
-      chartData: {
-        labels: ['Quận 1', 'Quận 5', 'Quận 7', 'Quận 10'],
+  props: {
+    labels: {
+      type: Array,
+      required: true
+    },
+    values: {
+      type: Array,
+      required: true
+    },
+    title: {
+      type: String,
+      required: true
+    },
+    yAxisLabel: {
+      type: String,
+      required: true
+    }
+  },
+  computed: {
+    chartData() {
+      return {
+        labels: this.labels,
         datasets: [
           {
-            label: 'Giá thuê trung bình (triệu/tháng)',
+            label: this.yAxisLabel,
             backgroundColor: '#000000',
-            data: [15, 12, 10, 8]
+            data: this.values
           }
         ]
-      },
-      chartOptions: {
+      }
+    },
+    chartOptions() {
+      return {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
@@ -51,7 +71,7 @@ export default {
           },
           title: {
             display: true,
-            text: 'Biểu đồ giá thuê theo khu vực'
+            text: this.title
           }
         },
         scales: {
@@ -59,7 +79,7 @@ export default {
             beginAtZero: true,
             title: {
               display: true,
-              text: 'Giá (triệu đồng)'
+              text: this.yAxisLabel
             }
           }
         }

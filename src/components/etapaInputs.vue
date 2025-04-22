@@ -18,6 +18,7 @@
                                 name="price"
                                 class="px-2 py-1 w-full placeholder:text-sm border-[0.5px] rounded-lg"
                                 placeholder="Nhập giá thuê"
+                                v-model="filterParams.price"
                             />
                        </div>
                        <div class="flex items-center justify-between gap-8">
@@ -28,6 +29,7 @@
                                 name="area"
                                 class="px-2 py-1 w-full placeholder:text-sm border-[0.5px] rounded-lg"
                                 placeholder="Nhập diện tích"
+                                v-model="filterParams.area"
                             />
                        </div>
                        <div class="flex items-center justify-between gap-8">
@@ -35,24 +37,50 @@
                                 Mức thu nhập trung bình
                             </p>
                             <input 
-                                name="price"
+                                name="income"
                                 class="px-2 py-1 w-full placeholder:text-sm border-[0.5px] rounded-lg"
                                 placeholder="Nhập mức thu nhập trung bình"
+                                v-model="filterParams.income"
                             />
                        </div>
                        <button
                             class="px-2 py-1 mt-4 bg-black text-white font-semibold rounded-lg"
+                            @click="handleFilter"
                        >
-                          Lọc khu vực
+                          Lọc khu vực
                        </button>
                     </div>
               </div>
               <div class="p-4 border-solid border-gray-300 border-[0.5px] rounded-lg">
-                    <p class="font-semibold mb-4">
-                        Biểu đồ khu vực
-                    </p>
-                    <div class="chart-container" style="height: 300px;">
-                        <BarChart />
+                    <div class="flex items-center justify-between mb-4">
+                        <p class="font-semibold">
+                            Biểu đồ khu vực
+                        </p>
+                        <select 
+                            v-model="selectedChartType"
+                            class="px-2 py-1 border-[0.5px] rounded-lg"
+                        >
+                            <option value="price">Giá thuê</option>
+                            <option value="area">Diện tích</option>
+                            <option value="income">Thu nhập</option>
+                            <option value="density">Mật độ dân cư</option>
+                            <option value="customers">Lượng khách/ngày</option>
+                            <option value="cafes">Số lượng quán cafe</option>
+                        </select>
+                    </div>
+                    <div v-if="loading" class="flex items-center justify-center h-[300px]">
+                        <p>Đang tải dữ liệu...</p>
+                    </div>
+                    <div v-else-if="error" class="flex items-center justify-center h-[300px]">
+                        <p class="text-red-500">{{ error }}</p>
+                    </div>
+                    <div v-else class="chart-container" style="height: 300px;">
+                        <BarChart 
+                            :labels="chartData.labels"
+                            :values="chartData.values"
+                            :title="chartData.title"
+                            :yAxisLabel="chartData.yAxisLabel"
+                        />
                     </div>
               </div>
               </div>
@@ -206,6 +234,7 @@ import criaSlideresMixin from "@/components/mixins/criaSlideres.vue"
 import saveProjectMixin from "./mixins/saveProject.vue"
 import { PopoverArrow, PopoverClose, PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from "radix-vue"
 import BarChart from "./chart/BarChart.vue"
+import { fetchLocationData, processChartData, fetchFilteredChartData } from '../services/ChartService.vue'
 
 export default {
     name: "vue-inputs-etapa",
@@ -242,7 +271,22 @@ export default {
                 "TC2",
                 "TC3",
                 "TC4"
-            ]
+            ],
+            locationData: [],
+            chartData: {
+                labels: [],
+                values: [],
+                title: '',
+                yAxisLabel: ''
+            },
+            selectedChartType: 'price',
+            loading: true,
+            error: null,
+            filterParams: {
+                price: '',
+                area: '',
+                income: ''
+            }
         }
     },
     computed: {
@@ -265,6 +309,7 @@ export default {
     mounted() {
         this.updateFromStore()
         this.criaSlideres()
+        this.fetchData()
     },
     beforeUnmount() {
         this.updateFromStore()
@@ -340,6 +385,47 @@ export default {
             } else {
                 window.alert("Bạn phải có ít nhất 3 phương án để phân tích!")
             }
+        },
+        async fetchData() {
+            try {
+                this.loading = true;
+                this.error = null;
+                this.locationData = await fetchLocationData();
+                this.updateChartData(this.selectedChartType);
+            } catch (error) {
+                this.error = 'Không thể tải dữ liệu';
+                console.error('Error:', error);
+            } finally {
+                this.loading = false;
+            }
+        },
+        updateChartData(type) {
+            this.chartData = processChartData(this.locationData, type);
+        },
+        async handleFilter() {
+            try {
+                this.loading = true;
+                this.error = null;
+                
+                const params = {
+                    price: Number(this.filterParams.price) || undefined,
+                    area: Number(this.filterParams.area) || undefined,
+                    income: Number(this.filterParams.income) || undefined
+                };
+                
+                this.locationData = await fetchFilteredChartData(params);
+                this.updateChartData(this.selectedChartType);
+            } catch (error) {
+                this.error = 'Không thể lọc dữ liệu';
+                console.error('Error:', error);
+            } finally {
+                this.loading = false;
+            }
+        }
+    },
+    watch: {
+        selectedChartType(newType) {
+            this.updateChartData(newType);
         }
     }
 }

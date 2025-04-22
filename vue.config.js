@@ -5,6 +5,7 @@ module.exports = defineConfig({
     publicPath: "",
     configureWebpack: {
         resolve: {
+            extensions: ['.tsx', '.ts', '.js', '.vue'],
             alias: {
                 '@': path.resolve(__dirname, 'src')
             }
