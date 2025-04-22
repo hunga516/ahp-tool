@@ -1,61 +1,70 @@
 <template>
     <vueMenuAhp />
 
-    <section class="section-resultados">
-
-        <div class="container-centro">
-            <h3>
+    <section class="min-h-[600px] w-full bg-gray-50 p-8">
+        <div class="container-card max-w-7xl mx-auto mb-8 animate-fade-in">
+            <h3 class="text-xl font-semibold text-black text-center mb-6">
                 {{ $t('matrizPrioridadesGlobais') }}
             </h3>
-            <table class="matriz-resultados">
+            
+            <table class="table-custom">
                 <tr>
-                    <th class="th-titulo-coluna"> </th>
-                    <th class="th-titulo-linha" v-for="(itemCriterio, indexCriterio) in criteriosSegunda"
-                        :key="indexCriterio">
+                    <th class="table-header text-left"> </th>
+                    <th v-for="(itemCriterio, indexCriterio) in criteriosSegunda" 
+                        :key="indexCriterio" 
+                        class="table-header">
                         {{ itemCriterio }}
                     </th>
                 </tr>
+                
                 <tr>
-                    <th class="th-titulo-coluna">
+                    <th class="table-header text-left">
                         {{ $t('tituloPesoGlobal') }}
                     </th>
                     <td v-for="(pesoGlobal, indexPesoGlobal) in matrizSegunda[matrizSegunda.length - 1]['pesos']"
-                        :key="indexPesoGlobal">
+                        :key="indexPesoGlobal"
+                        class="table-cell">
                         {{ pesoGlobal.toFixed(4) }}
                     </td>
                 </tr>
 
                 <tr v-for="(itemOption, indexOption) in optionsSegunda" :key="indexOption">
-                    <th class="th-titulo-coluna">
+                    <th class="table-header text-left">
                         {{ itemOption }}
                     </th>
-                    <td v-for="(pesoCriterio, indexPesoCriterio) in matrizPrimeira" :key="indexPesoCriterio">
+                    <td v-for="(pesoCriterio, indexPesoCriterio) in matrizPrimeira" 
+                        :key="indexPesoCriterio"
+                        class="table-cell">
                         {{ pesoCriterio[pesoCriterio.length - 1]['pesos'][indexOption].toFixed(4) }}
                     </td>
                 </tr>
-
             </table>
         </div>
-        <div class="container-vetor-resultado">
 
-            <h3>{{ $t('vetorPrioridadeGlobal') }}</h3>
-            <table class="vetor-resultado">
+        <div class="container-card max-w-7xl mx-auto animate-fade-in">
+            <h3 class="text-xl font-semibold text-black text-center mb-6">
+                {{ $t('vetorPrioridadeGlobal') }}
+            </h3>
+            
+            <table class="table-custom">
                 <tr>
-                    <th class="th-titulo-linha" v-for="(itemOption, indexOption) in optionsSegunda" :key="indexOption">
+                    <th v-for="(itemOption, indexOption) in optionsSegunda" 
+                        :key="indexOption"
+                        class="table-header">
                         {{ itemOption }}
                     </th>
                 </tr>
                 <tr>
-                    <td v-for="(itemOption, indexOption) in resultadoFinal()" :key="indexOption">
+                    <td v-for="(itemOption, indexOption) in resultadoFinal()" 
+                        :key="indexOption"
+                        class="table-cell">
                         {{ itemOption.toFixed(4) }}
                     </td>
                 </tr>
-
             </table>
         </div>
 
         <vueButtonProjectControl />
-
     </section>
 </template>
 <script>
@@ -120,134 +129,19 @@ export default {
 }
 
 </script>
-<style scoped>
-.section-resultados {
-    width: 100%;
-    min-height: 600px;
-    padding: 2rem;
-    background: #fafafa;
-}
-
-.container-centro {
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto;
-    width: 90%;
-    max-width: 1200px;
-    background: white;
-    padding: 2rem;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-}
-
-.container-centro h3,
-.container-vetor-resultado h3 {
-    font-size: 1.25rem;
-    color: #2c3e50;
-    margin-bottom: 1.5rem;
-    font-weight: 600;
-    text-align: center;
-}
-
-.container-vetor-resultado {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 2rem auto;
-    width: 90%;
-    max-width: 1200px;
-    background: white;
-    padding: 2rem;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    user-select: none;
-}
-
-/* Bảng kết quả */
-.matriz-resultados,
-.vetor-resultado {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1rem;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.matriz-resultados td,
-.vetor-resultado td {
-    padding: 1rem;
-    text-align: center;
-    background-color: #000000;
-    color: white;
-    font-size: 0.95rem;
-    transition: all 0.2s ease;
-}
-
-.matriz-resultados td:hover,
-.vetor-resultado td:hover {
-    background-color: #333333;
-}
-
-.th-titulo-coluna {
-    padding: 1rem;
-    font-size: 0.95rem;
-    font-weight: 600;
-    text-align: left;
-    color: #2c3e50;
-    background: #f8f9fa;
-    border-bottom: 2px solid #eaeaea;
-}
-
-.th-titulo-linha {
-    padding: 1rem;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #2c3e50;
-    background: #f8f9fa;
-    border-bottom: 2px solid #eaeaea;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .section-resultados {
-        padding: 1rem;
-    }
-
-    .container-centro,
-    .container-vetor-resultado {
-        width: 100%;
-        padding: 1rem;
-    }
-
-    .matriz-resultados td,
-    .vetor-resultado td,
-    .th-titulo-coluna,
-    .th-titulo-linha {
-        padding: 0.75rem;
-        font-size: 0.85rem;
-    }
-
-    .container-centro h3,
-    .container-vetor-resultado h3 {
-        font-size: 1.1rem;
-    }
-}
-
-/* Animation */
-@keyframes fadeIn {
+<style>
+@keyframes fade-in {
     from {
         opacity: 0;
         transform: translateY(20px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-.container-centro,
-.container-vetor-resultado {
-    animation: fadeIn 0.5s ease-out;
+.animate-fade-in {
+    animation: fade-in 0.5s ease-out;
 }
 </style>

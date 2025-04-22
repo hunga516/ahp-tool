@@ -1,5 +1,144 @@
 <template>
     <section class="section-inputs">
+        <div class="grid grid-cols-2 gap-4 mb-4">
+              <div class="grid grid-rows-2 gap-4">
+                <div class="p-4 border-solid border-gray-300 border-[0.5px] rounded-lg ">
+                    <p class="font-semibold">
+                        Bộ lọc
+                    </p>
+                    <p class="text-muted-foreground text-xs">
+                        Lọc theo các nhu cầu chọn quá của bạn
+                    </p>
+                    <div class="mt-4 flex flex-col gap-2">
+                       <div class="flex items-center justify-between gap-8">
+                            <p class="font-semibold text-sm w-24">
+                                Giá thuê
+                            </p>
+                            <input 
+                                name="price"
+                                class="px-2 py-1 w-full placeholder:text-sm border-[0.5px] rounded-lg"
+                                placeholder="Nhập giá thuê"
+                            />
+                       </div>
+                       <div class="flex items-center justify-between gap-8">
+                            <p class="font-semibold text-sm w-24">
+                                Diện tích
+                            </p>
+                            <input 
+                                name="area"
+                                class="px-2 py-1 w-full placeholder:text-sm border-[0.5px] rounded-lg"
+                                placeholder="Nhập diện tích"
+                            />
+                       </div>
+                       <div class="flex items-center justify-between gap-8">
+                            <p class="font-semibold text-sm w-24">
+                                Mức thu nhập trung bình
+                            </p>
+                            <input 
+                                name="price"
+                                class="px-2 py-1 w-full placeholder:text-sm border-[0.5px] rounded-lg"
+                                placeholder="Nhập mức thu nhập trung bình"
+                            />
+                       </div>
+                       <button
+                            class="px-2 py-1 mt-4 bg-black text-white font-semibold rounded-lg"
+                       >
+                          Lọc khu vực
+                       </button>
+                    </div>
+              </div>
+              <div class="p-4 border-solid border-gray-300 border-[0.5px] rounded-lg">
+                    <p class="font-semibold mb-4">
+                        Biểu đồ khu vực
+                    </p>
+                    <div class="chart-container" style="height: 300px;">
+                        <BarChart />
+                    </div>
+              </div>
+              </div>
+              <div class="flex flex-col gap-4">
+                    <div class="relative p-4 grid grid-cols-5 border-[0.5px] border-solid border-gray-300 rounded-lg">
+                        <div class="absolute -top-2 -right-2 px-3 py-1 bg-black text-white font-bold rounded-md flex items-center justify-center">
+                            +
+                        </div>
+                        <img
+                            class="col-span-1 rounded-full w-16 h-16"
+                            src="https://cdn.thuvienphapluat.vn/uploads/tintuc/2025/04/16/tphcm.jpg"
+                         />
+                         <div class="col-span-4 flex flex-col gap-2 font-medium">
+                            <p>
+                                Khu vực TPHCM
+                            </p>
+                            <p class="text-sm">
+                                Đường Nguyễn Trãi - Quận 5
+                            </p>
+                            <p class="justify-self-end text-xs text-muted-foreground">
+                                100m2 12tr/th 50tr/m2
+                            </p>
+                         </div>
+                    </div>
+                    <div class="relative p-4 grid grid-cols-5 border-[0.5px] border-solid border-gray-300 rounded-lg">
+                        <div class="absolute -top-2 -right-2 px-3 py-1 bg-black text-white font-bold rounded-md flex items-center justify-center">
+                            +
+                        </div>
+                        <img
+                            class="col-span-1 rounded-full w-16 h-16"
+                            src="https://cdn.thuvienphapluat.vn/uploads/tintuc/2025/04/16/tphcm.jpg"
+                         />
+                         <div class="col-span-4 flex flex-col gap-2 font-medium">
+                            <p>
+                                Khu vực TPHCM
+                            </p>
+                            <p class="text-sm">
+                                Đường Nguyễn Trãi - Quận 5
+                            </p>
+                            <p class="justify-self-end text-xs text-muted-foreground">
+                                100m2 12tr/th 50tr/m2
+                            </p>
+                         </div>
+                    </div>
+                    <div class="relative p-4 grid grid-cols-5 border-[0.5px] border-solid border-gray-300 rounded-lg">
+                        <div class="absolute -top-2 -right-2 px-3 py-1 bg-black text-white font-bold rounded-md flex items-center justify-center">
+                            +
+                        </div>
+                        <img
+                            class="col-span-1 rounded-full w-16 h-16"
+                            src="https://cdn.thuvienphapluat.vn/uploads/tintuc/2025/04/16/tphcm.jpg"
+                         />
+                         <div class="col-span-4 flex flex-col gap-2 font-medium">
+                            <p>
+                                Khu vực TPHCM
+                            </p>
+                            <p class="text-sm">
+                                Đường Nguyễn Trãi - Quận 5
+                            </p>
+                            <p class="justify-self-end text-xs text-muted-foreground">
+                                100m2 12tr/th 50tr/m2
+                            </p>
+                         </div>
+                    </div>
+                    <div class="relative p-4 grid grid-cols-5 border-[0.5px] border-solid border-gray-300 rounded-lg">
+                        <div class="absolute -top-2 -right-2 px-3 py-1 bg-black text-white font-bold rounded-md flex items-center justify-center">
+                            +
+                        </div>
+                        <img
+                            class="col-span-1 rounded-full w-16 h-16"
+                            src="https://cdn.thuvienphapluat.vn/uploads/tintuc/2025/04/16/tphcm.jpg"
+                         />
+                         <div class="col-span-4 flex flex-col gap-2 font-medium">
+                            <p>
+                                Khu vực TPHCM
+                            </p>
+                            <p class="text-sm">
+                                Đường Nguyễn Trãi - Quận 5
+                            </p>
+                            <p class="justify-self-end text-xs text-muted-foreground">
+                                100m2 12tr/th 50tr/m2
+                            </p>
+                         </div>
+                    </div>
+              </div>
+        </div>
         <div class="input-container">
             <!-- Phần Tiêu chí -->
             <div class="criteria-section">
@@ -65,11 +204,14 @@
 import vueButtonProjectControl from "./buttonProjectControl.vue"
 import criaSlideresMixin from "@/components/mixins/criaSlideres.vue"
 import saveProjectMixin from "./mixins/saveProject.vue"
+import { PopoverArrow, PopoverClose, PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from "radix-vue"
+import BarChart from "./chart/BarChart.vue"
 
 export default {
     name: "vue-inputs-etapa",
     components: {
-        vueButtonProjectControl
+        vueButtonProjectControl,
+        BarChart
     },
     mixins: [
         criaSlideresMixin,
@@ -206,14 +348,14 @@ export default {
 <style scoped>
 .section-inputs {
     padding: 2rem;
-    max-width: 1200px;
     margin: 0 auto;
     min-height: 600px;
 }
 
 .input-container {
-    display: grid;
-    gap: 2rem;
+    display: flex;
+    /* display: grid; */
+    gap: 1rem;
     margin-bottom: 2rem;
 }
 
@@ -333,5 +475,10 @@ export default {
     .header-labels {
         grid-template-columns: 100px 1fr 80px;
     }
+}
+
+.chart-container {
+    width: 100%;
+    height: 300px;
 }
 </style>

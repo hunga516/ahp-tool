@@ -79,8 +79,8 @@ const translation = {
     tituloMatrizSegundaEtapaAhp: "So sánh cặp tiêu chí",
 
     // RESULTS STAGE
-    matrizPrioridadesGlobais: "MA TRẬN ƯU TIÊN CỤC BỘ",
-    vetorPrioridadeGlobal: "VECTOR ƯU TIÊN TOÀN CỤC",
+    matrizPrioridadesGlobais: "Tiêu chí",
+    vetorPrioridadeGlobal: "Phương án",
     tituloPesoGlobal: "Trọng số tiêu chí",
 
     // AHP RIGHT SIDEBAR MENU

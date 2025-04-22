@@ -3,11 +3,10 @@ import App from "./App.vue"
 import router from "./router"
 import portuguese from "@/assets/javascript/portuguese.js"
 import english from "@/assets/javascript/english.js"
-import "@/assets/css/global.css"
-import "@/assets/css/primeiraSegunda.css"
+import "./assets/css/main.css"
+import "./assets/css/global.css"
+import "./assets/css/primeiraSegunda.css"
 import store from "./store"
-
-
 
 import { createMetaManager } from "vue-meta"
 
