@@ -124,6 +124,30 @@ export default {
 
                 await writable.close()
 
+                // Lưu dự án lên API
+                try {
+                    const response = await fetch('http://localhost:5000/api/projects', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            ...projectData,
+                            id: Date.now().toString(),
+                            timestamp: new Date().toISOString()
+                        })
+                    })
+
+                    if (!response.ok) {
+                        throw new Error('Không thể lưu dự án lên server')
+                    }
+
+                    console.log("Dự án đã được lưu lên server thành công")
+                } catch (apiError) {
+                    console.error("Lỗi khi lưu lên server:", apiError)
+                    // Không throw error ở đây để không ảnh hưởng đến việc xuất file
+                }
+
                 console.log("Arquivo exportado com sucesso:", fileName)
             } catch (error) {
                 if (error.name !== "AbortError") {

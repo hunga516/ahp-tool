@@ -2,26 +2,28 @@
 
     <div>
         <table class="matriz" :name="idMatriz" :ref="idMatriz">
-            <!-- Linha de título -->
-            <tr class="linha-titulo">
-                <th></th>
-                <th class="th-titulo-linha" v-for="(item, optionIndex) in optionMatriz" :key="optionIndex">
-                    {{ item }}
-                </th>
+            <tbody>
+                <!-- Linha de título -->
+                <tr class="linha-titulo">
+                    <th></th>
+                    <th class="th-titulo-linha" v-for="(item, optionIndex) in optionMatriz" :key="optionIndex">
+                        {{ item }}
+                    </th>
 
-            </tr>
-            <tr v-for="(item, optionIndex) in optionMatriz" :key="optionIndex" class="linha-valores">
-                <th class="th-titulo-coluna">
-                    {{ item }}
-                </th>
-                <td v-for="(item, valueIndex) in valueMatriz[optionIndex]" :key="valueIndex" class="celulas-valores"
-                    :ref="`${optionIndex + 1}${valueIndex + 1}`" :id="`td-${optionIndex + 1}${valueIndex + 1}`">
-                    {{ valueMatriz[optionIndex][valueIndex] >= 1 ? valueMatriz[optionIndex][valueIndex].toFixed(0) :
-                        `1/${(1 / valueMatriz[optionIndex][valueIndex]).toFixed(0)}` }}
-                </td>
+                </tr>
+                <tr v-for="(item, optionIndex) in optionMatriz" :key="optionIndex" class="linha-valores">
+                    <th class="th-titulo-coluna">
+                        {{ item }}
+                    </th>
+                    <td v-for="(item, valueIndex) in valueMatriz[optionIndex]" :key="valueIndex" class="celulas-valores"
+                        :ref="`${optionIndex + 1}${valueIndex + 1}`" :id="`td-${optionIndex + 1}${valueIndex + 1}`">
+                        {{ valueMatriz[optionIndex][valueIndex] >= 1 ? valueMatriz[optionIndex][valueIndex].toFixed(0) :
+                            `1/${(1 / valueMatriz[optionIndex][valueIndex]).toFixed(0)}` }}
+                    </td>
 
-            </tr>
+                </tr>
 
+            </tbody>
         </table>
     </div>
 </template>

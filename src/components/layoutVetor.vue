@@ -2,16 +2,16 @@
 
     <div class="vetor-container">
         <table class="vetor matriz" :name="idVetor">
-            <tr>
-                <th class="th-titulo-vetor">{{ tituloVetor }}</th>
-            </tr>
-            <tr v-for="(item, index) in valueVetor" :key="index" class="linha-valores">
-                <td class="celulas-valores">
-                    {{ item.toFixed(4) }}
-                </td>
-
-            </tr>
-
+            <tbody>
+                <tr>
+                    <th class="th-titulo-vetor">{{ tituloVetor }}</th>
+                </tr>
+                <tr v-for="(item, index) in valueVetor" :key="index" class="linha-valores">
+                    <td class="celulas-valores">
+                        {{ item.toFixed(4) }}
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </div>
 </template>

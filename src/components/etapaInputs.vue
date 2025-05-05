@@ -1,5 +1,59 @@
 <template>
     <section class="section-inputs">
+        <div class="flex justify-end mb-4">
+            <button 
+                class="flex items-center gap-2 px-3 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
+                @click="toggleHistory"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                </svg>
+                <span>Lịch sử tính toán</span>
+            </button>
+        </div>
+
+        <div v-if="showHistory" class="p-4 mb-8 border-solid border-gray-300 border-[0.5px] rounded-lg">
+            <div class="flex items-center justify-between mb-4">
+                <p class="font-semibold">
+                    Lịch sử tính toán
+                </p>
+                <button 
+                    class="px-2 py-1 bg-black text-white font-semibold rounded-lg"
+                    @click="fetchHistory"
+                >
+                    Tải lại
+                </button>
+            </div>
+            <div v-if="historyLoading" class="flex items-center justify-center h-[200px]">
+                <p>Đang tải dữ liệu...</p>
+            </div>
+            <div v-else-if="historyError" class="flex items-center justify-center h-[200px]">
+                <p class="text-red-500">{{ historyError }}</p>
+            </div>
+            <div v-else class="history-list max-h-[300px] overflow-y-auto">
+                <div
+                    v-for="project in historyProjects"
+                    :key="project._id"
+                    class="p-3 mb-2 border-[0.5px] border-solid border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100"
+                    @click="loadProjectFromHistory(project)"
+                >
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="font-medium">{{ project.criteriosLabelPrimeira.join(', ') }}</p>
+                            <p class="text-sm text-gray-500">
+                                {{ new Date(project.timestamp).toLocaleString() }}
+                            </p>
+                        </div>
+                        <button 
+                            class="px-2 py-1 bg-blue-500 text-white rounded-lg text-sm"
+                            @click.stop="loadProjectFromHistory(project)"
+                        >
+                            Nhập dữ liệu
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="grid grid-cols-2 gap-4 mb-4">
               <div class="grid grid-rows-2 gap-4">
                 <div class="p-4 border-solid border-gray-300 border-[0.5px] rounded-lg ">
@@ -84,86 +138,32 @@
                     </div>
               </div>
               </div>
-              <div class="flex flex-col gap-4">
-                    <div class="relative p-4 grid grid-cols-5 border-[0.5px] border-solid border-gray-300 rounded-lg">
-                        <div class="absolute -top-2 -right-2 px-3 py-1 bg-black text-white font-bold rounded-md flex items-center justify-center">
-                            +
-                        </div>
+              <div class="flex flex-col gap-4 max-h-[800px] overflow-y-scroll">
+                    <div
+                        v-for="item in locationData"
+                        :key="item._id"
+                        class="relative p-4 grid grid-cols-5 border-[0.5px] border-solid border-gray-300 rounded-lg cursor-pointer"
+                        :class="selectedLocations.includes(item._id) ? 'bg-gray-200 border-black' : ''"
+                        @click="toggleSelectLocation(item._id)"
+                    >
                         <img
                             class="col-span-1 rounded-full w-16 h-16"
-                            src="https://cdn.thuvienphapluat.vn/uploads/tintuc/2025/04/16/tphcm.jpg"
-                         />
-                         <div class="col-span-4 flex flex-col gap-2 font-medium">
+                            :src="'https://ahp-coffee.onrender.com/images/' + item.imageURL"
+                            alt="Ảnh khu vực"
+                        />
+                        <div class="col-span-4 flex flex-col gap-2 font-medium">
                             <p>
-                                Khu vực TPHCM
+                                {{ item.khu_vuc }}
                             </p>
                             <p class="text-sm">
-                                Đường Nguyễn Trãi - Quận 5
+                                {{ item.quan }}
                             </p>
                             <p class="justify-self-end text-xs text-muted-foreground">
-                                100m2 12tr/th 50tr/m2
+                                {{ item.dien_tich_tb }}m2 
+                                {{ (item.chi_phi_thue / 1000000).toLocaleString() }}tr/th 
+                                {{ (item.chi_phi_thue / item.dien_tich_tb / 1000000).toLocaleString(undefined, {maximumFractionDigits: 2}) }}tr/m2
                             </p>
-                         </div>
-                    </div>
-                    <div class="relative p-4 grid grid-cols-5 border-[0.5px] border-solid border-gray-300 rounded-lg">
-                        <div class="absolute -top-2 -right-2 px-3 py-1 bg-black text-white font-bold rounded-md flex items-center justify-center">
-                            +
                         </div>
-                        <img
-                            class="col-span-1 rounded-full w-16 h-16"
-                            src="https://cdn.thuvienphapluat.vn/uploads/tintuc/2025/04/16/tphcm.jpg"
-                         />
-                         <div class="col-span-4 flex flex-col gap-2 font-medium">
-                            <p>
-                                Khu vực TPHCM
-                            </p>
-                            <p class="text-sm">
-                                Đường Nguyễn Trãi - Quận 5
-                            </p>
-                            <p class="justify-self-end text-xs text-muted-foreground">
-                                100m2 12tr/th 50tr/m2
-                            </p>
-                         </div>
-                    </div>
-                    <div class="relative p-4 grid grid-cols-5 border-[0.5px] border-solid border-gray-300 rounded-lg">
-                        <div class="absolute -top-2 -right-2 px-3 py-1 bg-black text-white font-bold rounded-md flex items-center justify-center">
-                            +
-                        </div>
-                        <img
-                            class="col-span-1 rounded-full w-16 h-16"
-                            src="https://cdn.thuvienphapluat.vn/uploads/tintuc/2025/04/16/tphcm.jpg"
-                         />
-                         <div class="col-span-4 flex flex-col gap-2 font-medium">
-                            <p>
-                                Khu vực TPHCM
-                            </p>
-                            <p class="text-sm">
-                                Đường Nguyễn Trãi - Quận 5
-                            </p>
-                            <p class="justify-self-end text-xs text-muted-foreground">
-                                100m2 12tr/th 50tr/m2
-                            </p>
-                         </div>
-                    </div>
-                    <div class="relative p-4 grid grid-cols-5 border-[0.5px] border-solid border-gray-300 rounded-lg">
-                        <div class="absolute -top-2 -right-2 px-3 py-1 bg-black text-white font-bold rounded-md flex items-center justify-center">
-                            +
-                        </div>
-                        <img
-                            class="col-span-1 rounded-full w-16 h-16"
-                            src="https://cdn.thuvienphapluat.vn/uploads/tintuc/2025/04/16/tphcm.jpg"
-                         />
-                         <div class="col-span-4 flex flex-col gap-2 font-medium">
-                            <p>
-                                Khu vực TPHCM
-                            </p>
-                            <p class="text-sm">
-                                Đường Nguyễn Trãi - Quận 5
-                            </p>
-                            <p class="justify-self-end text-xs text-muted-foreground">
-                                100m2 12tr/th 50tr/m2
-                            </p>
-                         </div>
                     </div>
               </div>
         </div>
@@ -222,7 +222,6 @@
                 </div>
             </div>
         </div>
-
         <vueButtonProjectControl @update-view="importHandler()" />
     </section>
 </template>
@@ -286,7 +285,12 @@ export default {
                 price: '',
                 area: '',
                 income: ''
-            }
+            },
+            selectedLocations: [],
+            historyProjects: [],
+            historyLoading: false,
+            historyError: null,
+            showHistory: false,
         }
     },
     computed: {
@@ -301,6 +305,9 @@ export default {
         },
         currentCriteriosSimboloPrimeira() {
             return this.$store.getters.currentCriteriosSimboloPrimeira
+        },
+        selectedLocationObjects() {
+            return this.locationData.filter(item => this.selectedLocations.includes(item._id));
         }
     },
     updated() {
@@ -310,6 +317,7 @@ export default {
         this.updateFromStore()
         this.criaSlideres()
         this.fetchData()
+        this.fetchHistory()
     },
     beforeUnmount() {
         this.updateFromStore()
@@ -400,7 +408,11 @@ export default {
             }
         },
         updateChartData(type) {
-            this.chartData = processChartData(this.locationData, type);
+            let data = this.locationData;
+            if (this.selectedLocations.length > 0) {
+                data = this.locationData.filter(item => this.selectedLocations.includes(item._id));
+            }
+            this.chartData = processChartData(data, type);
         },
         async handleFilter() {
             try {
@@ -414,6 +426,7 @@ export default {
                 };
                 
                 this.locationData = await fetchFilteredChartData(params);
+                this.selectedLocations = [];
                 this.updateChartData(this.selectedChartType);
             } catch (error) {
                 this.error = 'Không thể lọc dữ liệu';
@@ -421,11 +434,104 @@ export default {
             } finally {
                 this.loading = false;
             }
-        }
+        },
+        toggleSelectLocation(id) {
+            const idx = this.selectedLocations.indexOf(id);
+            if (idx === -1) {
+                this.selectedLocations.push(id);
+            } else {
+                this.selectedLocations.splice(idx, 1);
+            }
+            this.updateChartData(this.selectedChartType);
+        },
+        async fetchHistory() {
+            try {
+                this.historyLoading = true;
+                this.historyError = null;
+                const response = await fetch('http://localhost:5000/api/projects');
+                if (!response.ok) {
+                    throw new Error('Không thể tải lịch sử');
+                }
+                const data = await response.json();
+                this.historyProjects = data.projects;
+            } catch (error) {
+                this.historyError = error.message;
+                console.error('Error fetching history:', error);
+            } finally {
+                this.historyLoading = false;
+            }
+        },
+        async loadProjectFromHistory(project) {
+            try {
+                this.$store.dispatch("changeImportFlag", true);
+                
+                // Cập nhật dữ liệu từ project
+                Object.keys(project).forEach(key => {
+                    if (key !== '_id' && key !== 'timestamp') {
+                        this.$store.dispatch(`change${key.charAt(0).toUpperCase() + key.slice(1)}`, project[key]);
+                    }
+                });
+
+                // Cập nhật local state
+                this.optionsLabelPrimeira = project.optionsLabelPrimeira;
+                this.optionsSimboloPrimeira = project.optionsSimboloPrimeira;
+                this.criteriosLabelPrimeira = project.criteriosLabelPrimeira;
+                this.criteriosSimboloPrimeira = project.criteriosSimboloPrimeira;
+
+                // Emit sự kiện cập nhật view
+                this.$emit("update-view");
+                
+                alert('Dữ liệu đã được nhập thành công!');
+            } catch (error) {
+                console.error('Error loading project:', error);
+                alert('Có lỗi xảy ra khi nhập dữ liệu: ' + error.message);
+            }
+        },
+        toggleHistory() {
+            this.showHistory = !this.showHistory;
+            if (this.showHistory) {
+                this.fetchHistory();
+            }
+        },
     },
     watch: {
         selectedChartType(newType) {
             this.updateChartData(newType);
+        },
+        selectedLocations(newVal) {
+            if (newVal.length > 0) {
+                this.optionsLabelPrimeira = [...this.selectedLocationObjects.map(item => item.khu_vuc)];
+                this.optionsSimboloPrimeira = this.selectedLocationObjects.map((item, idx) => `O${idx + 1}`);
+            } else {
+                this.optionsLabelPrimeira = [
+                    "Phương án 1",
+                    "Phương án 2",
+                    "Phương án 3",
+                    "Phương án 4"
+                ];
+                this.optionsSimboloPrimeira = [
+                    "O1",
+                    "O2",
+                    "O3",
+                    "O4"
+                ];
+            }
+        },
+        locationData() {
+            if (this.selectedLocations.length === 0) {
+                this.optionsLabelPrimeira = [
+                    "Phương án 1",
+                    "Phương án 2",
+                    "Phương án 3",
+                    "Phương án 4"
+                ];
+                this.optionsSimboloPrimeira = [
+                    "O1",
+                    "O2",
+                    "O3",
+                    "O4"
+                ];
+            }
         }
     }
 }
@@ -566,5 +672,28 @@ export default {
 .chart-container {
     width: 100%;
     height: 300px;
+}
+
+.history-list {
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
+}
+
+.history-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.history-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.history-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 </style>
