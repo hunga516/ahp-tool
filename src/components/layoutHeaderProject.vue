@@ -25,8 +25,8 @@ export default {
         return {
             steps: [
                 { label: 'INPUTS', route: '/inputs' },
-                { label: this.$t("step") + ' 1', route: '/primeira' },
-                { label: this.$t("step") + ' 2', route: '/segunda' },
+                { label: this.$t("step") + ' ma trận phương án', route: '/primeira' },
+                { label: this.$t("step") + ' ma trận tiêu chí', route: '/segunda' },
                 { label: this.$t("resultados"), route: '/resultados' }
             ]
         }
@@ -44,6 +44,16 @@ export default {
     },
     methods: {
         handleLink(index, route) {
+            let cr = 0;
+            if (route === '/segunda') {
+                cr = this.$store.getters.currentMatrizPrimeira?.[0]?.slice(-1)[0]?.cr ?? 0;
+            } else if (route === '/resultados') {
+                cr = this.$store.getters.currentMatrizSegunda?.[0]?.slice(-1)[0]?.cr ?? 0;
+            }
+            if (cr > 0.1) {
+                alert('Chỉ số nhất quán CR phải nhỏ hơn hoặc bằng 0.1 để tiếp tục!');
+                return;
+            }
             if (this.viewProgress >= index) {
                 this.$store.dispatch("changeTabViewAtual", route)
                 this.$router.replace({ path: route })

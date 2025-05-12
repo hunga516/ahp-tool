@@ -21,7 +21,7 @@ const translation = {
     importProject: "Nhập dự án",
     resetProject: "Đặt lại dự án",
     continueProject: "Tiếp tục dự án",
-    step: "BƯỚC",
+    step: "Tính",
     resultados: "KẾT QUẢ",
 
     // FOOTER

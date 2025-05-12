@@ -51,7 +51,7 @@ export default {
                 window.URL.revokeObjectURL(url)
 
                 // Gửi dữ liệu lên API
-                const response = await fetch('http://localhost:5000/api/projects', {
+                const response = await fetch('https://api-ahp.onrender.com/api/projects', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

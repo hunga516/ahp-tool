@@ -30,7 +30,7 @@ export default {
             this.loading = true
             this.error = null
             try {
-                const response = await fetch('http://localhost:5000/api/projects')
+                const response = await fetch('https://api-ahp.onrender.com/api/projects')
                 if (!response.ok) {
                     throw new Error('Không thể tải danh sách dự án')
                 }

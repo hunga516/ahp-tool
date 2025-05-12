@@ -2,7 +2,7 @@
 
 export const fetchLocationData = async () => {
     try {
-        const response = await fetch(`https://ahp-coffee.onrender.com/data`);
+        const response = await fetch(`https://api-ahp.onrender.com/data`);
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -68,11 +68,11 @@ export const fetchFilteredChartData = async (params) => {
     try {
         // Tạo query string từ params
         const queryParams = new URLSearchParams();
-        if (params.price) queryParams.append('price', params.price);
-        if (params.area) queryParams.append('area', params.area);
-        if (params.income) queryParams.append('income', params.income);
+        if (params.price) queryParams.append('chi_phi_thue', params.price);
+        if (params.area) queryParams.append('dien_tich_tb', params.area);
+        if (params.income) queryParams.append('muc_thu_nhap_tb', params.income);
 
-        const response = await fetch(`${API_URL}/locations/filter?${queryParams}`);
+        const response = await fetch(`https://api-ahp.onrender.com/data?${queryParams}`);
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }

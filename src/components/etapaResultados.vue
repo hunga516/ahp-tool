@@ -41,6 +41,49 @@
             </table>
         </div>
 
+        <div class="container-card max-w-4xl mx-auto mb-8 animate-fade-in">
+            <h3 class="text-lg font-semibold text-black text-center mb-4">
+                Biểu đồ trọng số các tiêu chí
+            </h3>
+            <BarChart
+                :labels="criteriosSegunda"
+                :values="matrizSegunda[matrizSegunda.length - 1]['pesos']"
+                :title="'Trọng số các tiêu chí'"
+                :yAxisLabel="'Trọng số'"
+            />
+        </div>
+
+        <div class="container-card max-w-4xl mx-auto mb-8 animate-fade-in">
+            <h3 class="text-lg font-semibold text-black text-center mb-4">
+                Tỷ lệ phần trăm các tiêu chí (100%)
+            </h3>
+            <PieChart
+                v-if="hasPieChart"
+                :labels="criteriosSegunda"
+                :values="matrizSegunda[matrizSegunda.length - 1]['pesos']"
+                :title="'Tỷ lệ phần trăm các tiêu chí'"
+            />
+            <BarChart
+                v-else
+                :labels="criteriosSegunda"
+                :values="matrizSegunda[matrizSegunda.length - 1]['pesos']"
+                :title="'Tỷ lệ phần trăm các tiêu chí'"
+                :yAxisLabel="'Tỷ lệ'"
+            />
+        </div>
+
+        <div class="container-card max-w-4xl mx-auto mb-8 animate-fade-in">
+            <h3 class="text-lg font-semibold text-black text-center mb-4">
+                So sánh tổng điểm các phương án
+            </h3>
+            <BarChart
+                :labels="optionsSegunda"
+                :values="resultadoFinal()"
+                :title="'So sánh tổng điểm các phương án'"
+                :yAxisLabel="'Tổng điểm'"
+            />
+        </div>
+
         <div class="container-card max-w-7xl mx-auto animate-fade-in">
             <h3 class="text-xl font-semibold text-black text-center mb-6">
                 {{ $t('vetorPrioridadeGlobal') }}
@@ -70,11 +113,15 @@
 <script>
 import vueMenuAhp from "@/components/helpButton.vue"
 import vueButtonProjectControl from "@/components/buttonProjectControl.vue"
+import BarChart from "./chart/BarChart.vue"
+import PieChart from "./chart/PieChart.vue"
 export default {
     name: "vue-resultados-etapa",
     components: {
         vueMenuAhp,
-        vueButtonProjectControl
+        vueButtonProjectControl,
+        BarChart,
+        PieChart
     },
     computed: {
         matrizPrimeira() {
@@ -88,6 +135,9 @@ export default {
         },
         optionsSegunda() {
             return this.$store.getters.currentOptionsLabelSegunda
+        },
+        hasPieChart() {
+            return !!this.$options.components.PieChart
         }
     },
     methods: {

@@ -1,8 +1,10 @@
 <template>
-  <Bar
-    :options="chartOptions"
-    :data="chartData"
-  />
+  <div class="chart-container">
+    <Bar
+      :options="chartOptions"
+      :data="chartData"
+    />
+  </div>
 </template>
 
 <script>
@@ -90,9 +92,16 @@ export default {
 </script>
 
 <style>
+.container-card {
+  max-width: 800px;
+  margin: 0 auto;
+  /* ... */
+}
 .chart-container {
-  position: relative;
-  height: 300px;
   width: 100%;
+  max-width: 100%;
+  height: 350px;
+  min-height: 350px;
+  position: relative;
 }
 </style>

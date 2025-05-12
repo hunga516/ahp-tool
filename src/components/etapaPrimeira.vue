@@ -230,7 +230,7 @@ export default {
             }
             // Cálculo do CI
             const consistenceIndex = []
-            const n = (consistence.length - 1)
+            const n = consistence.length
             for (let i = 0; i < consistence.length; i++) {
                 consistenceIndex.push(
                     (lambda[i] - n) / (n - 1)

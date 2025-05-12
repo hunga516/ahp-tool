@@ -138,7 +138,7 @@
                     </div>
               </div>
               </div>
-              <div class="flex flex-col gap-4 max-h-[800px] overflow-y-scroll">
+              <div class="flex flex-col gap-4 max-h-[800px] overflow-y-scroll relative">
                     <div
                         v-for="item in locationData"
                         :key="item._id"
@@ -148,7 +148,7 @@
                     >
                         <img
                             class="col-span-1 rounded-full w-16 h-16"
-                            :src="'https://ahp-coffee.onrender.com/images/' + item.imageURL"
+                            :src="'https://api-ahp.onrender.com/images/' + item.imageURL"
                             alt="Ảnh khu vực"
                         />
                         <div class="col-span-4 flex flex-col gap-2 font-medium">
@@ -165,6 +165,13 @@
                             </p>
                         </div>
                     </div>
+                    <button
+                      v-if="selectedLocations.length > 0"
+                      class="sticky bottom-0 left-0 right-0 z-10 px-4 py-2 bg-green-600 text-white rounded shadow-lg mt-2"
+                      @click="applySelectedLocations"
+                    >
+                      Áp dụng các khu vực đã chọn
+                    </button>
               </div>
         </div>
         <div class="input-container">
@@ -448,7 +455,7 @@ export default {
             try {
                 this.historyLoading = true;
                 this.historyError = null;
-                const response = await fetch('http://localhost:5000/api/projects');
+                const response = await fetch('https://api-ahp.onrender.com/api/projects');
                 if (!response.ok) {
                     throw new Error('Không thể tải lịch sử');
                 }
@@ -492,6 +499,16 @@ export default {
             if (this.showHistory) {
                 this.fetchHistory();
             }
+        },
+        applySelectedLocations() {
+            // Lấy tên các khu vực đã chọn
+            const names = this.selectedLocationObjects.map(item => item.khu_vuc);
+            // Gán cho phương án, nếu ít hơn 4 thì bổ sung tên mặc định
+            this.optionsLabelPrimeira = [
+                ...names,
+                ...Array(4 - names.length).fill('').map((_, i) => `Phương án ${names.length + i + 1}`)
+            ].slice(0, 4);
+            this.optionsSimboloPrimeira = this.optionsLabelPrimeira.map((_, idx) => `O${idx + 1}`);
         },
     },
     watch: {
@@ -695,5 +712,9 @@ export default {
 
 .history-list::-webkit-scrollbar-thumb:hover {
     background: #555;
+}
+
+.flex.flex-col.gap-4.max-h-[800px].overflow-y-scroll.relative {
+    position: relative;
 }
 </style>
