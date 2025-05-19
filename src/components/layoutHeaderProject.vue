@@ -25,8 +25,8 @@ export default {
         return {
             steps: [
                 { label: 'INPUTS', route: '/inputs' },
-                { label: this.$t("step") + ' ma trận phương án', route: '/primeira' },
                 { label: this.$t("step") + ' ma trận tiêu chí', route: '/segunda' },
+                { label: this.$t("step") + ' ma trận phương án', route: '/primeira' },
                 { label: this.$t("resultados"), route: '/resultados' }
             ]
         }
@@ -44,14 +44,25 @@ export default {
     },
     methods: {
         handleLink(index, route) {
-            let cr = 0;
-            if (route === '/segunda') {
-                cr = this.$store.getters.currentMatrizPrimeira?.[0]?.slice(-1)[0]?.cr ?? 0;
+            let crList = [];
+            if (route === '/segunda' || route === '/primeira') {
+                crList = (this.$store.getters.currentMatrizSegunda || [])
+                    .filter(m => Array.isArray(m) && m.length > 0 && m[m.length - 1] && typeof m[m.length - 1] === 'object')
+                    .map(m => m[m.length - 1].cr)
+                    .filter(cr => cr !== undefined);
             } else if (route === '/resultados') {
-                cr = this.$store.getters.currentMatrizSegunda?.[0]?.slice(-1)[0]?.cr ?? 0;
+                const crListSegunda = (this.$store.getters.currentMatrizSegunda || [])
+                    .filter(m => Array.isArray(m) && m.length > 0 && m[m.length - 1] && typeof m[m.length - 1] === 'object')
+                    .map(m => m[m.length - 1].cr)
+                    .filter(cr => cr !== undefined);
+                const crListPrimeira = (this.$store.getters.currentMatrizPrimeira || [])
+                    .filter(m => Array.isArray(m) && m.length > 0 && m[m.length - 1] && typeof m[m.length - 1] === 'object')
+                    .map(m => m[m.length - 1].cr)
+                    .filter(cr => cr !== undefined);
+                crList = [...crListSegunda, ...crListPrimeira];
             }
-            if (cr > 0.1) {
-                alert('Chỉ số nhất quán CR phải nhỏ hơn hoặc bằng 0.1 để tiếp tục!');
+            if (crList.some(cr => cr > 0.1)) {
+                alert('Chỉ số nhất quán CR của tất cả các ma trận phải nhỏ hơn hoặc bằng 0.1 để tiếp tục!');
                 return;
             }
             if (this.viewProgress >= index) {

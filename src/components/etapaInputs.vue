@@ -213,9 +213,11 @@
                 <div class="input-list">
                     <div v-for="(item, index) in optionsLabelPrimeira" :key="index" class="input-row">
                         <input class="input-short" v-model="optionsSimboloPrimeira[index]" maxlength="5"
-                            @blur="checkBlankText('optionsSimboloPrimeira', index, 'O')">
+                            @blur="checkBlankText('optionsSimboloPrimeira', index, 'O')"
+                            @input="onChangeOptionSimboloPrimeira">
                         <input class="input-long" v-model="optionsLabelPrimeira[index]" maxlength="20"
-                            @blur="checkBlankText('optionsLabelPrimeira', index, 'Option-')">
+                            @blur="checkBlankText('optionsLabelPrimeira', index, 'Option-')"
+                            @input="onChangeOptionLabelPrimeira">
                         <div class="button-group">
                             <button @click="removeOption(index)" class="action-button remove-btn" tabindex="-1">
                                 <span>-</span>
@@ -509,6 +511,19 @@ export default {
                 ...Array(4 - names.length).fill('').map((_, i) => `Phương án ${names.length + i + 1}`)
             ].slice(0, 4);
             this.optionsSimboloPrimeira = this.optionsLabelPrimeira.map((_, idx) => `O${idx + 1}`);
+            // Lưu lại vào store
+            this.$store.dispatch("changeOptionsLabelPrimeira", this.optionsLabelPrimeira);
+            this.$store.dispatch("changeOptionsSimboloPrimeira", this.optionsSimboloPrimeira);
+        },
+        // Khi thay đổi tên viết tắt phương án
+        onChangeOptionSimboloPrimeira() {
+            this.$store.dispatch("changeOptionsSimboloPrimeira", this.optionsSimboloPrimeira)
+            this.$store.dispatch("changeOptionsSimboloSegunda", this.optionsSimboloPrimeira)
+        },
+        // Khi thay đổi tên phương án
+        onChangeOptionLabelPrimeira() {
+            this.$store.dispatch("changeOptionsLabelPrimeira", this.optionsLabelPrimeira)
+            this.$store.dispatch("changeOptionsLabelSegunda", this.optionsLabelPrimeira)
         },
     },
     watch: {
@@ -519,35 +534,56 @@ export default {
             if (newVal.length > 0) {
                 this.optionsLabelPrimeira = [...this.selectedLocationObjects.map(item => item.khu_vuc)];
                 this.optionsSimboloPrimeira = this.selectedLocationObjects.map((item, idx) => `O${idx + 1}`);
+                // Lưu lại tên phương án vào store khi chọn khu vực
+                this.$store.dispatch("changeOptionsLabelPrimeira", this.optionsLabelPrimeira)
+                this.$store.dispatch("changeOptionsSimboloPrimeira", this.optionsSimboloPrimeira)
             } else {
-                this.optionsLabelPrimeira = [
-                    "Phương án 1",
-                    "Phương án 2",
-                    "Phương án 3",
-                    "Phương án 4"
-                ];
-                this.optionsSimboloPrimeira = [
-                    "O1",
-                    "O2",
-                    "O3",
-                    "O4"
-                ];
+                // Ưu tiên lấy từ store nếu có
+                if (this.currentOptionsLabelPrimeira.length > 0) {
+                    this.optionsLabelPrimeira = this.currentOptionsLabelPrimeira;
+                } else {
+                    this.optionsLabelPrimeira = [
+                        "Phương án 1",
+                        "Phương án 2",
+                        "Phương án 3",
+                        "Phương án 4"
+                    ];
+                }
+                if (this.currentOptionsSimboloPrimeira.length > 0) {
+                    this.optionsSimboloPrimeira = this.currentOptionsSimboloPrimeira;
+                } else {
+                    this.optionsSimboloPrimeira = [
+                        "O1",
+                        "O2",
+                        "O3",
+                        "O4"
+                    ];
+                }
             }
         },
         locationData() {
             if (this.selectedLocations.length === 0) {
-                this.optionsLabelPrimeira = [
-                    "Phương án 1",
-                    "Phương án 2",
-                    "Phương án 3",
-                    "Phương án 4"
-                ];
-                this.optionsSimboloPrimeira = [
-                    "O1",
-                    "O2",
-                    "O3",
-                    "O4"
-                ];
+                // Ưu tiên lấy từ store nếu có
+                if (this.currentOptionsLabelPrimeira.length > 0) {
+                    this.optionsLabelPrimeira = this.currentOptionsLabelPrimeira;
+                } else {
+                    this.optionsLabelPrimeira = [
+                        "Phương án 1",
+                        "Phương án 2",
+                        "Phương án 3",
+                        "Phương án 4"
+                    ];
+                }
+                if (this.currentOptionsSimboloPrimeira.length > 0) {
+                    this.optionsSimboloPrimeira = this.currentOptionsSimboloPrimeira;
+                } else {
+                    this.optionsSimboloPrimeira = [
+                        "O1",
+                        "O2",
+                        "O3",
+                        "O4"
+                    ];
+                }
             }
         }
     }
