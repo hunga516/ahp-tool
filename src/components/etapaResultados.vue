@@ -2,7 +2,7 @@
     <vueMenuAhp />
 
     <section class="min-h-[600px] w-full bg-gray-50 p-8">
-        <div class="container-card max-w-7xl mx-auto mb-8 animate-fade-in">
+        <div class="container-card max-w-7xl mx-auto mb-8 animate-fade-in mt-20">
             <h3 class="text-xl font-semibold text-black text-center mb-6">
                 {{ $t('matrizPrioridadesGlobais') }}
             </h3>

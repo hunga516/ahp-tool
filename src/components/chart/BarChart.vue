@@ -51,12 +51,18 @@ export default {
   },
   computed: {
     chartData() {
+      // Mảng màu cho từng cột
+      const barColors = [
+        '#4F8A8B', '#FBD46D', '#F76B8A', '#A8D8EA', '#374785', '#24305E', '#70A1D7', '#F8E9A1', '#F76B1C', '#6A0572', '#AB83A1'
+      ];
+      // Lặp lại màu nếu số cột > số màu
+      const colors = this.values.map((_, idx) => barColors[idx % barColors.length]);
       return {
         labels: this.labels,
         datasets: [
           {
             label: this.yAxisLabel,
-            backgroundColor: '#000000',
+            backgroundColor: colors,
             data: this.values
           }
         ]

@@ -20,7 +20,8 @@
     "vue-chartjs": "^5.3.2",
     "vue-meta": "^3.0.0-alpha.2",
     "vue-router": "^4.2.5",
-    "vuex": "^4.0.2"
+    "vuex": "^4.0.2",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "serve": "vue-cli-service serve",

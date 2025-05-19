@@ -138,7 +138,7 @@
                     </div>
               </div>
               </div>
-              <div class="flex flex-col gap-4 max-h-[800px] overflow-y-scroll relative">
+              <div class="flex flex-col gap-4 max-h-[880px] overflow-y-scroll relative">
                     <div
                         v-for="item in locationData"
                         :key="item._id"

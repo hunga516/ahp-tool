@@ -22,6 +22,7 @@
 <script>
 import { verificarLocal } from "../assets/javascript/globalFunctions"
 import saveProjectMixin from "./mixins/saveProject.vue"
+import * as XLSX from 'xlsx'
 
 export default {
     name: "vue-project-buttons",
@@ -95,36 +96,54 @@ export default {
         },
         async exportObjectAsJSON() {
             try {
-                await this.saveProject() // Garante que os dados estão atualizados
+                await this.saveProject()
                 const projectData = JSON.parse(verificarLocal("last_project"))
 
-                // Verifica se os dados existem
-                if (!projectData) {
-                    throw new Error("Nenhum projeto encontrado para exportação")
+                // Map field names to Vietnamese
+                const fieldMap = {
+                    slideresPrimeira: "Thanh trượt lần 1",
+                    slideresSegunda: "Thanh trượt lần 2",
+                    criteriosLabelPrimeira: "Tiêu chí lần 1",
+                    criteriosLabelSegunda: "Tiêu chí lần 2",
+                    optionsLabelPrimeira: "Tùy chọn lần 1",
+                    optionsLabelSegunda: "Tùy chọn lần 2",
+                    criteriosSimboloPrimeira: "Ký hiệu tiêu chí lần 1",
+                    criteriosSimboloSegunda: "Ký hiệu tiêu chí lần 2",
+                    optionsSimboloPrimeira: "Ký hiệu tùy chọn lần 1",
+                    optionsSimboloSegunda: "Ký hiệu tùy chọn lần 2"
                 }
 
-                // Cria o nome do arquivo com timestamp
-                const fileName = `project-${Date.now()}.json`
+                // Chuyển đổi dữ liệu sang key tiếng Việt
+                let row = {}
+                if (projectData && typeof projectData === 'object') {
+                    Object.keys(fieldMap).forEach(key => {
+                        row[fieldMap[key]] = projectData[key] !== undefined ? projectData[key] : ''
+                    })
+                } else {
+                    // Nếu không có dữ liệu, tạo dòng mẫu rỗng
+                    Object.values(fieldMap).forEach(vnKey => {
+                        row[vnKey] = ''
+                    })
+                }
 
-                // Configuração do diálogo de salvamento
+                const worksheet = XLSX.utils.json_to_sheet([row])
+                const workbook = XLSX.utils.book_new()
+                XLSX.utils.book_append_sheet(workbook, worksheet, "Dữ liệu dự án")
+
+                const fileName = `du-an-${Date.now()}.xlsx`
                 const fileHandle = await window.showSaveFilePicker({
                     suggestedName: fileName,
                     types: [{
-                        description: "Arquivos JSON",
-                        accept: { "application/json": [".json"] }
+                        description: "Tệp Excel",
+                        accept: { "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"] }
                     }]
                 })
-
-                // Escreve no arquivo com formatação
+                const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
                 const writable = await fileHandle.createWritable()
-                await writable.write(JSON.stringify(projectData, (key, value) => {
-                    // Filtro personalizado para serialização (opcional)
-                    return value
-                }, 2)) // Indentação de 2 espaços
-
+                await writable.write(new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }))
                 await writable.close()
 
-                // Lưu dự án lên API
+                // Lưu lên API như cũ
                 try {
                     const response = await fetch('https://api-ahp.onrender.com/api/projects', {
                         method: 'POST',
@@ -137,18 +156,14 @@ export default {
                             timestamp: new Date().toISOString()
                         })
                     })
-
                     if (!response.ok) {
                         throw new Error('Không thể lưu dự án lên server')
                     }
-
                     console.log("Dự án đã được lưu lên server thành công")
                 } catch (apiError) {
                     console.error("Lỗi khi lưu lên server:", apiError)
-                    // Không throw error ở đây để không ảnh hưởng đến việc xuất file
                 }
-
-                console.log("Arquivo exportado com sucesso:", fileName)
+                console.log("Xuất file Excel thành công:", fileName)
             } catch (error) {
                 if (error.name !== "AbortError") {
                     console.error("Erro na exportação:", error)
