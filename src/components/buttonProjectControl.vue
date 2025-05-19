@@ -154,13 +154,33 @@ export default {
                     throw new Error("Formato inválido")
                 }
 
-                // Verificação de propriedades essenciais
-                const requiredProps = ["slideresPrimeira", "criteriosLabelPrimeira"]
+                const requiredProps = ["slideresPrimeira", "criteriosLabelPrimeira", "optionsLabelPrimeira"]
                 requiredProps.forEach(prop => {
                     if (!(prop in parsed)) {
-                        throw new Error(`Propriedade obrigatória ausente: ${prop}`)
+                        if (prop === 'slideresPrimeira') {
+                            alert('Cấu trúc file không hợp lệ hoặc thiếu dữ liệu. Số phương án phải lớn hơn 3.');
+                        } else if (prop === 'criteriosLabelPrimeira') {
+                            alert('Cấu trúc file không hợp lệ hoặc thiếu dữ liệu. Số tiêu chí phải lớn hơn 3.');
+                        } else if (prop === 'optionsLabelPrimeira') {
+                            alert('Cấu trúc file không hợp lệ hoặc thiếu dữ liệu. Số phương án phải lớn hơn 3.');
+                        } else {
+                            alert('Cấu trúc file không hợp lệ hoặc thiếu dữ liệu.');
+                        }
+                        throw new Error('Cấu trúc file không hợp lệ hoặc thiếu dữ liệu.');
                     }
                 })
+
+                // Kiểm tra số lượng tiêu chí và phương án
+                const numCriterios = Array.isArray(parsed.criteriosLabelPrimeira) ? parsed.criteriosLabelPrimeira.length : 0;
+                const numOptions = Array.isArray(parsed.optionsLabelPrimeira) ? parsed.optionsLabelPrimeira.length : 0;
+                if (numCriterios < 4 || numCriterios > 9) {
+                    alert('Số lượng tiêu chí phải từ 4 đến 9!');
+                    return null;
+                }
+                if (numOptions < 4 || numOptions > 5) {
+                    alert('Số lượng phương án phải từ 4 đến 5!');
+                    return null;
+                }
 
                 console.log("Importação bem-sucedida:", parsed)
                 return parsed
@@ -222,6 +242,59 @@ export default {
                         // Thêm dòng trống sau mỗi bảng
                         csvSections.push('')
                     }
+                }
+                // Sau khi xuất các bảng dữ liệu gốc, thêm 2 bảng thống kê
+                // 1. Bảng kết quả ma trận tiêu chí
+                const criterios = this.$store.getters.currentCriteriosLabelSegunda || [];
+                const pesosCriterios = (this.$store.getters.currentMatrizSegunda?.length > 0)
+                  ? this.$store.getters.currentMatrizSegunda[this.$store.getters.currentMatrizSegunda.length-1].pesos
+                  : [];
+                if (criterios.length && pesosCriterios.length) {
+                  csvSections.push('# KET QUA MA TRAN TIEU CHI (THONG KE)');
+                  csvSections.push(criterios.join(','));
+                  csvSections.push(pesosCriterios.map(x => x.toFixed(6)).join(','));
+                  csvSections.push('');
+                }
+                // 2. Bảng kết quả phương án
+                const options = this.$store.getters.currentOptionsLabelSegunda || [];
+                // Tính tổng điểm phương án như hàm resultadoFinal
+                let tongDiem = [];
+                try {
+                  const matrizPrimeira = this.$store.getters.currentMatrizPrimeira;
+                  const matrizSegunda = this.$store.getters.currentMatrizSegunda;
+                  if (matrizPrimeira && matrizSegunda && matrizPrimeira.length && matrizSegunda.length) {
+                    const multiplicaPeso = (index) => {
+                      const vetor = [];
+                      for (let j = 0; j < matrizSegunda[index].length; j++) {
+                        vetor.push(
+                          matrizSegunda[matrizSegunda.length - 1]["pesos"][index] * matrizPrimeira[index][matrizPrimeira[index].length - 1]["pesos"][j]
+                        );
+                      }
+                      return vetor;
+                    };
+                    const pesos = [];
+                    for (let i = 0; i < matrizPrimeira.length; i++) {
+                      pesos.push(multiplicaPeso(i));
+                    }
+                    const somaColuna = (index) => {
+                      let soma = 0;
+                      for (let lin = 0; lin < pesos.length; lin++) {
+                        soma += pesos[lin][index];
+                      }
+                      return soma;
+                    };
+                    for (let index = 0; index < pesos[0].length; index++) {
+                      tongDiem.push(somaColuna(index));
+                    }
+                    // Cắt đúng số phương án
+                    tongDiem = tongDiem.slice(0, options.length);
+                  }
+                } catch (e) {}
+                if (options.length && tongDiem.length) {
+                  csvSections.push('# KET QUA PHUONG AN (THONG KE)');
+                  csvSections.push(options.join(','));
+                  csvSections.push(tongDiem.map(x => x.toFixed(6)).join(','));
+                  csvSections.push('');
                 }
                 const csvContent = csvSections.join('\n')
                 const fileName = `du-an-${Date.now()}.csv`

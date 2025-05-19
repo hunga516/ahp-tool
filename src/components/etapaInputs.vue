@@ -524,6 +524,7 @@ export default {
         onChangeOptionLabelPrimeira() {
             this.$store.dispatch("changeOptionsLabelPrimeira", this.optionsLabelPrimeira)
             this.$store.dispatch("changeOptionsLabelSegunda", this.optionsLabelPrimeira)
+            this.criaSlideres();
         },
     },
     watch: {

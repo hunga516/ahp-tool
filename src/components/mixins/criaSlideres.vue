@@ -42,13 +42,14 @@ export default {
         // Cria um arranjo simples a partir do vetor de opções
         arranjoOptions() {
             const arranjoOptions = []
-            for (let i = 0; i < this.optionsPrimeira.length; i++) {
-                for (let j = 0; j < this.optionsPrimeira.length; j++) {
+            const optionLabels = this.$store.getters.currentOptionsLabelPrimeira
+            for (let i = 0; i < optionLabels.length; i++) {
+                for (let j = 0; j < optionLabels.length; j++) {
                     if (i < j) {
                         arranjoOptions.push(
                             {
                                 id: `${i + 1}${j + 1}`,
-                                texto: `${this.optionsPrimeira[i]} vs ${this.optionsPrimeira[j]}`,
+                                texto: `${optionLabels[i]} vs ${optionLabels[j]}`,
                                 valor: 50
                             }
                         )
