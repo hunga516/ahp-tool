@@ -21,8 +21,13 @@ egunda
                 <vueMatriz idMatriz="matriz-segunda-etapa" :optionMatriz="criteriosSegunda"
                     :valueMatriz="matrizValores" />
                 <vueVetor idVetor="matriz-segunda-etapa" tituloVetor="Criteria Weight" :valueVetor="vetorPeso()" />
-                <vueConsistencia :RI="consistencia('ri')" :CI="consistencia('ci')" :CR="consistencia('cr')"
-                    :lambda="consistencia('lambda')" />
+                <vueConsistencia
+                    :RI="consistencia('ri')"
+                    :CI="consistencia('ci')"
+                    :CR="consistencia('cr')"
+                    :lambda="consistencia('lambda')"
+                    :consVector="consistencia('cons')"
+                />
             </div>
         </div>
     </section>
@@ -213,7 +218,9 @@ export default {
             return (this.matrizValores[this.matrizValores.length - 1]["pesos"])
         },
         consistencia(item) {
-            return (this.matrizValores[this.matrizValores.length - 1][item])
+            const arr = this.matrizValores[this.matrizValores.length - 1];
+            if (!arr) return item === 'cons' ? [] : 0;
+            return arr[item] || (item === 'cons' ? [] : 0);
         }
     }
 }

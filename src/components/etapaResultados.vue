@@ -3,6 +3,7 @@
 
     <section class="min-h-[600px] w-full bg-gray-50 p-8">
         <div class="container-card max-w-7xl mx-auto mb-8 animate-fade-in mt-20">
+            
             <h3 class="text-xl font-semibold text-black text-center mb-6">
                 {{ $t('matrizPrioridadesGlobais') }}
             </h3>
@@ -115,6 +116,7 @@ import vueMenuAhp from "@/components/helpButton.vue"
 import vueButtonProjectControl from "@/components/buttonProjectControl.vue"
 import BarChart from "./chart/BarChart.vue"
 import PieChart from "./chart/PieChart.vue"
+import html2pdf from 'html2pdf.js'
 export default {
     name: "vue-resultados-etapa",
     components: {
@@ -171,6 +173,18 @@ export default {
             resultado.splice(this.optionsSegunda.length)
 
             return resultado
+        },
+        exportToPDF() {
+            // Sử dụng html2pdf để xuất toàn bộ section kết quả
+            const element = this.$refs.pdfContent;
+            const opt = {
+                margin:       0.3,
+                filename:     'AHP_KetQua.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
         }
     }
 }

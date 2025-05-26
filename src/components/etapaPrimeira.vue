@@ -30,7 +30,9 @@
                     <vueVetor tituloVetor="Criteria Weight" :idVetor="itemCriterio" :valueVetor="vetorPeso(indexMatriz)"
                         @click="trocaMatrizInputAtual(itemCriterio)" />
                     <vueConsistencia :RI="consistencia(indexMatriz, 'ri')" :CI="consistencia(indexMatriz, 'ci')"
-                        :CR="consistencia(indexMatriz, 'cr')" :lambda="consistencia(indexMatriz, 'lambda')" />
+                        :CR="consistencia(indexMatriz, 'cr')" :lambda="consistencia(indexMatriz, 'lambda')"
+                        :consVector="consistencia(indexMatriz, 'cons')"
+                    />
                 </div>
             </div>
         </div>
@@ -255,7 +257,9 @@ export default {
             return (this.matrizValores[index][this.matrizValores[index].length - 1]["pesos"])
         },
         consistencia(index, item) {
-            return (this.matrizValores[index][this.matrizValores[index].length - 1][item])
+            const arr = this.matrizValores[index];
+            if (!arr || !arr.length) return item === 'cons' ? [] : 0;
+            return arr[arr.length - 1][item] || (item === 'cons' ? [] : 0);
         }
     }
 }

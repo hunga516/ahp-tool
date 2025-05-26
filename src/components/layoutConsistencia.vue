@@ -4,6 +4,12 @@
         class="consistencia"
     >
         <tr>
+            <th class="th-titulo-vetor">Consistency Vector</th>
+        </tr>
+        <tr v-for="(item, idx) in consVector" :key="idx">
+            <td class="celulas-valores">{{ item.toFixed(4) }}</td>
+        </tr>
+        <tr>
             <td id="td-oculto">
                 -
             </td>
@@ -52,6 +58,10 @@ export default {
         CR: {
             type: Number,
             default: 99
+        },
+        consVector: {
+            type: Array,
+            default: () => []
         }
     },
     computed: {
