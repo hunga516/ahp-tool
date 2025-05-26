@@ -66,7 +66,6 @@ export default {
         }
     },
     mounted() {
-        // O valor inicial do sliderButton é igual ao recebido pela prop
         this.valorInput = this.valor
     },
     methods: {
@@ -105,7 +104,6 @@ export default {
         },
 
         handleInput() {
-            // Chuyển đổi giá trị slider thành các mức tương ứng
             const value = Number(this.valorInput);
             const values = [0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 100];
             const mappedValues = {
@@ -120,7 +118,6 @@ export default {
                 100: '9'
             };
 
-            // Tìm giá trị gần nhất
             const closest = values.reduce((prev, curr) => {
                 return (Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev);
             });

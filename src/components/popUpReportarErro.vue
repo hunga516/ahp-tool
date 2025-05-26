@@ -3,7 +3,6 @@
     <div
         class="reportarErro-container"
     >
-        <!-- O uso do atributo "name" em cada input é obrigatório pela API -->
         <form :action="formAtual" method="POST" id="formulario-reportar-bug" name="report-issue">
             <div class="dados" id="div-dados-formulario">
                 <span id="span-user-name-formulario">{{ $t('userNameReportarErro') }}</span>
@@ -43,16 +42,13 @@ export default {
         }
     },
     mounted() {
-        // Seleciola todos os inputs da página
         this.userInputs = document.querySelectorAll("input, textarea")
     },
     methods: {
         verificarCampos() {
             let camposVerificados = true
-            // Verifica se todos os campos obrigatórios foram preenchidos
             this.userInputs.forEach((element) => {
                 if (element.value.trim() === "") {
-                    // Adiciona uma borda vermelha aos elementos não preenchidos
                     element.style.border = "1pt solid red"
                     camposVerificados = false
                 } else {
@@ -63,7 +59,6 @@ export default {
         },
         enviarErro(event) {
             const camposPrenchidos = this.verificarCampos()
-            // Se algum campo obrigatório não foi preenchido, impedir o envio do formulário
             if (!camposPrenchidos) {
                 event.preventDefault()
             }

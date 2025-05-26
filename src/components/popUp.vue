@@ -5,16 +5,13 @@
         class='pop-up-container'
         id="pop-up-container"
     >
-        <!--  BARRA SUPERIOR DO POP-UP -->
         <div
             class='barra-pop-up'
             id="barra-pop-up"
         >
-            <!-- Titulo do Pop Up -->
             <h4 class="titulo-pop-up">
                 {{ $t(`${aberto}TituloPopUp`) }}
             </h4>
-            <!-- Botão Fechar Pop Up -->
             <button
                 class="close-pop-up"
                 @click="closePopUp()"
@@ -80,55 +77,41 @@ export default {
     },
     methods: {
         interromperMovimento() {
-            // Interrompe o movimento do pop up
             document.removeEventListener("mousemove", this.moverPopUp)
         },
         moverPopUp(event) {
-            // Define a coordenada do movimento
             let x = event.clientX - this.position.x
             let y = event.clientY - this.position.y
-            // Conserva os limites de movimento estabelecidos caso ultrapassados
             x = x < this.limite.left ? this.limite.left : x
             x = x > this.limite.right ? this.limite.right : x
             y = y < this.limite.top ? this.limite.top : y
             y = y > this.limite.bottom ? this.limite.bottom : y
-            // Move o pop up enquanto mousedown
             this.popUpContainer.style.left = `${x}px`
             this.popUpContainer.style.top = `${y}px`
         },
         prepararMovimento() {
-            // Eventos que interromperão o movimento do pop up
             document.addEventListener("mouseup", this.interromperMovimento)
             document.addEventListener("scroll", this.interromperMovimento)
             document.addEventListener("keydown", this.interromperMovimento)
             document.addEventListener("click", this.interromperMovimento)
-            // Adiciona o movimento à barra do pop up
             if (this.popUpBarra) {
                 this.popUpBarra.addEventListener("mousedown", (event) => {
-                    // Impede o usuário de selecionar textos enquanto arrasta o pop up
                     document.body.style.userSelect = "none"
-                    // Calcula a largura e altura do body. Os valores variam com o scroll da página (manter cálculo dentro desse evento)
                     const bodyHeight = document.getElementById("body").clientHeight
                     const bodyWidth = document.getElementById("body").clientWidth
-                    // Define a posição do mouse em relação ao pop up
                     this.position.x = event.clientX - this.popUpContainer.offsetLeft
                     this.position.y = event.clientY - this.popUpContainer.offsetTop
-                    // Define os this.limites de movimento do pop up
                     this.limite.right = bodyWidth - this.popUpContainer.clientWidth
                     this.limite.bottom = bodyHeight - this.popUpContainer.clientHeight
-                    // Chama a função para mover
                     document.addEventListener("mousemove", this.moverPopUp)
                 })
             }
         },
         closePopUp() {
-            // Restaurar a capacidade de seleção do usuário
             document.body.style.userSelect = "auto"
-            // Limpar eventos adicionados durante a movimentação
             document.removeEventListener("scroll", this.interromperMovimento)
             document.removeEventListener("keydown", this.interromperMovimento)
             document.removeEventListener("click", this.interromperMovimento)
-            // Fechar o pop-up
             this.$store.dispatch("changePopUp", null)
         }
     }

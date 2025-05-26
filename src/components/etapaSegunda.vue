@@ -1,7 +1,6 @@
 egunda
 <template>
 
-    <!-- SEÇÃO DOS INPUTS -->
     <section class="section-esquerda section-esquerda-segunda">
 
         <div class="container-esquerda">
@@ -133,7 +132,6 @@ export default {
             this.$store.dispatch("changeMatrizSegunda", matrizSegunda)
         },
         calcula(matrizSegunda) {
-            // Normalização da matriz
             const somaColunaMatriz = (matriz, col, jmax) => {
                 let soma = 0
                 for (let lin = 0; lin < jmax; lin++) {
@@ -154,7 +152,6 @@ export default {
                 return matriz
             }
             const normalizada = normalizaMatriz()
-            // Cálculo do vetor peso
             const calculaPeso = () => {
                 const vetor = []
                 for (let lin = 0; lin < normalizada.length; lin++) {
@@ -166,7 +163,6 @@ export default {
             }
             const pesos = calculaPeso()
 
-            // Cálculo do vetor WS
             const calculaWs = () => {
                 const vetor = []
                 for (let lin = 0; lin < matrizSegunda.length; lin++) {
@@ -180,7 +176,6 @@ export default {
             }
             const ws = calculaWs()
 
-            // Cálculo do vetor consistencia
             const calculaConsistence = () => {
                 const vetor = []
                 for (let i = 0; i < pesos.length; i++) {
@@ -190,17 +185,13 @@ export default {
             }
             const consistence = calculaConsistence()
 
-            // Cálculo do lambda
             const lambda = consistence.reduce((acc, valor) => acc + valor, 0) / consistence.length
 
-            // Cálculo do CI
             const n = consistence.length
             const consistenceIndex = (lambda - n) / (n - 1)
 
-            // Cálculo do CR (RI importado de globalConstants.js)
             const consistenceRatio = consistenceIndex / (RI[n])
 
-            // Armazenamento de valores calculados na matrizSegunda
             const armazenaCalculos = () => {
                 const objeto = {
                     normalizada: normalizada,

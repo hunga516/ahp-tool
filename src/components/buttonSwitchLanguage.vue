@@ -40,7 +40,6 @@ export default {
         }
     },
     mounted() {
-        // Verifica a preferencia de idioma da localStorage
         this.switchLanguage = verificarLocal("switch-language")
     },
     updated() {

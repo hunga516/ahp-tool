@@ -23,7 +23,6 @@ export default {
     methods: {
         async exportProject() {
             try {
-                // Lấy dữ liệu từ store
                 const projectData = {
                     id: Date.now().toString(),
                     criteriosLabelPrimeira: this.$store.getters.currentCriteriosLabelPrimeira,
@@ -36,12 +35,10 @@ export default {
                     timestamp: new Date().toISOString()
                 }
 
-                // Tạo file JSON
                 const dataStr = JSON.stringify(projectData, null, 2)
                 const dataBlob = new Blob([dataStr], { type: 'application/json' })
                 const url = window.URL.createObjectURL(dataBlob)
                 
-                // Tạo link tải xuống
                 const link = document.createElement('a')
                 link.href = url
                 link.download = `project_${projectData.id}.json`
@@ -50,7 +47,6 @@ export default {
                 document.body.removeChild(link)
                 window.URL.revokeObjectURL(url)
 
-                // Gửi dữ liệu lên API
                 const response = await fetch('https://api-ahp.onrender.com/api/projects', {
                     method: 'POST',
                     headers: {

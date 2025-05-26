@@ -17,7 +17,6 @@
         </div>
     </section>
 
-    <!-- SEÇÃO DAS MATRIZES -->
     <section class="section-direita section-direita-primeira">
         <div class="container-direita" v-for="(itemCriterio, indexMatriz) in criteriosPrimeira" :key="indexMatriz">
             <h3>
@@ -65,7 +64,7 @@ export default {
     ],
     data() {
         return {
-            sliderStore: [] // Matriz: Armazena um arranjo simples das opções para cada critério
+            sliderStore: [] 
         }
     },
     computed: {
@@ -86,10 +85,8 @@ export default {
         }
     },
     created() {
-        // Obtém os slideres armazenados para a primeira etapa
         this.sliderStore = this.$store.getters.currentSlideresPrimeira
         this.changeMatrix()
-        // Define a matriz em edição no loading
         this.$store.dispatch("changeMatrizInputAtual", this.criteriosPrimeira[0])
         this.debouncedChangeMatrix = _.debounce(this.changeMatrix, 100)
     },
@@ -122,12 +119,10 @@ export default {
             this.debouncedChangeMatrix()
         },
         matrizMaker(index) {
-            // Converte a escala e apresenta um número decimal positivo
             const dirValue = (key) => {
                 const valor = key[0] === key[1] ? 1.00 : this.conveterEscala(this.sliderStore[index].find(item => item.id === key).valor)
                 return valor
             }
-            // Converte a escala e apresenta o inverso de um número decimal positivo
             const invValue = (key) => {
                 const valor = (1 / this.conveterEscala(this.sliderStore[index].find(item => item.id === key).valor))
                 return valor > 1 ? Math.floor(valor) : valor
@@ -155,7 +150,6 @@ export default {
             this.$store.dispatch("changeMatrizPrimeira", matrizPrimeira)
         },
         calcula(matrizPrimeira) {
-            // Normalização da matriz
             const somaColunaMatriz = (matriz, col, jmax) => {
                 let soma = 0
                 for (let lin = 0; lin < jmax; lin++) {
@@ -179,7 +173,6 @@ export default {
             for (let i = 0; i < matrizPrimeira.length; i++) {
                 normalizada.push(normalizaMatriz(i))
             }
-            // Cálculo do vetor peso
             const calculaPeso = (index) => {
                 const vetor = []
                 for (let lin = 0; lin < normalizada[index].length; lin++) {
@@ -193,7 +186,6 @@ export default {
             for (let i = 0; i < normalizada.length; i++) {
                 pesos.push(calculaPeso(i))
             }
-            // Cálculo do vetor WS
             const calculaWs = (index) => {
                 const vetor = []
                 for (let lin = 0; lin < matrizPrimeira[index].length; lin++) {
@@ -209,7 +201,6 @@ export default {
             for (let i = 0; i < matrizPrimeira.length; i++) {
                 ws.push(calculaWs(i))
             }
-            // Cálculo do vetor consistencia
             const calculaConsistence = (index) => {
                 const vetor = []
                 for (let i = 0; i < pesos[index].length; i++) {
@@ -221,14 +212,12 @@ export default {
             for (let i = 0; i < pesos.length; i++) {
                 consistence.push(calculaConsistence(i))
             }
-            // Cálculo do lambda
             const lambda = []
             for (let i = 0; i < consistence.length; i++) {
                 lambda.push(
                     consistence[i].reduce((acc, valor) => acc + valor, 0) / consistence[i].length
                 )
             }
-            // Cálculo do CI
             const consistenceIndex = []
             const n = consistence.length
             for (let i = 0; i < consistence.length; i++) {
@@ -236,14 +225,12 @@ export default {
                     (lambda[i] - n) / (n - 1)
                 )
             }
-            // Cálculo do CR (RI importado de globalConstants.js)
             const consistenceRatio = []
             for (let i = 0; i < consistence.length; i++) {
                 consistenceRatio.push(
                     consistenceIndex[i] / (RI[n])
                 )
             }
-            // Armazenamento de valores calculados na matrizPrimeira
             const armazenaCalculos = (index) => {
                 const objeto = {
                     normalizada: normalizada[index],
@@ -261,11 +248,6 @@ export default {
             for (let index = 0; index < matrizPrimeira.length; index++) {
                 matrizPrimeira[index].push(armazenaCalculos(index))
             }
-            // console.log("PESOS:", pesos)
-            // console.log("WS:", ws)
-            // console.log("CONS:", consistence)
-            // console.log("Lambda:", lambda)
-            // console.log("CI:", consistenceIndex)
             console.log(matrizPrimeira)
             return matrizPrimeira
         },

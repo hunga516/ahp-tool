@@ -65,7 +65,6 @@ export default {
                 let parsed
 
                 if (file.name.endsWith('.csv')) {
-                    // Parse multi-table CSV
                     const lines = fileContent.split(/\r?\n/)
                     let result = {}
                     let currentKey = null
@@ -74,21 +73,17 @@ export default {
                     for (let i = 0; i < lines.length; i++) {
                         const line = lines[i].trim()
                         if (line.startsWith('# ')) {
-                            // Save previous table
                             if (currentKey && headers.length > 0) {
-                                // Xác định là mảng object hay mảng giá trị đơn
                                 if (headers.length === 1 && headers[0] === 'value') {
                                     result[currentKey] = rows.map(r => r[0])
                                 } else {
                                     result[currentKey] = rows.map(r => {
                                         let obj = {}
                                         headers.forEach((h, idx) => {
-                                            // Loại bỏ dấu nháy kép nếu có
                                             let val = r[idx]
                                             if (val && val.startsWith('"') && val.endsWith('"')) {
                                                 val = val.slice(1, -1).replace(/""/g, '"')
                                             }
-                                            // Nếu là số, convert sang số
                                             if (!isNaN(val) && val !== '') val = Number(val)
                                             obj[h] = val
                                         })
@@ -96,16 +91,12 @@ export default {
                                     })
                                 }
                             }
-                            // Bắt đầu bảng mới
                             currentKey = line.slice(2).trim()
                             headers = []
                             rows = []
                         } else if (line && !headers.length) {
-                            // Header
                             headers = line.split(',')
                         } else if (line && headers.length) {
-                            // Data row
-                            // Tách theo dấu phẩy, xử lý giá trị có nháy kép
                             let row = []
                             let inQuotes = false
                             let cell = ''
@@ -125,7 +116,6 @@ export default {
                             rows.push(row)
                         }
                     }
-                    // Save last table
                     if (currentKey && headers.length > 0) {
                         if (headers.length === 1 && headers[0] === 'value') {
                             result[currentKey] = rows.map(r => r[0].replace(/^"|"$/g, '').replace(/""/g, '"'))
@@ -146,7 +136,6 @@ export default {
                     }
                     parsed = result
                 } else {
-                    // Xử lý file JSON
                     parsed = JSON.parse(fileContent)
                 }
 
@@ -170,7 +159,6 @@ export default {
                     }
                 })
 
-                // Kiểm tra số lượng tiêu chí và phương án
                 const numCriterios = Array.isArray(parsed.criteriosLabelPrimeira) ? parsed.criteriosLabelPrimeira.length : 0;
                 const numOptions = Array.isArray(parsed.optionsLabelPrimeira) ? parsed.optionsLabelPrimeira.length : 0;
                 if (numCriterios < 4 || numCriterios > 9) {
@@ -204,27 +192,20 @@ export default {
                 let csvSections = []
                 for (const [key, value] of Object.entries(projectData)) {
                     if (Array.isArray(value)) {
-                        // Thêm tiêu đề bảng
                         csvSections.push(`# ${key}`)
                         if (value.length > 0 && typeof value[0] === 'object' && value[0] !== null) {
-                            // Mảng object hoặc mảng mảng object
                             let rows = []
-                            // Nếu là mảng 2 chiều (ví dụ slideresPrimeira)
                             if (Array.isArray(value[0])) {
-                                // Tìm tất cả các key có thể có
                                 let allKeys = new Set()
                                 value.forEach(arr => arr.forEach(obj => Object.keys(obj).forEach(k => allKeys.add(k))))
                                 allKeys = Array.from(allKeys)
-                                // Header
                                 rows.push(allKeys.join(','))
-                                // Dữ liệu
                                 value.forEach(arr => {
                                     arr.forEach(obj => {
                                         rows.push(allKeys.map(k => obj[k] !== undefined ? `"${String(obj[k]).replace(/"/g, '""')}"` : '').join(','))
                                     })
                                 })
                             } else {
-                                // Mảng object 1 chiều
                                 const allKeys = Object.keys(value[0])
                                 rows.push(allKeys.join(','))
                                 value.forEach(obj => {
@@ -233,18 +214,14 @@ export default {
                             }
                             csvSections.push(rows.join('\n'))
                         } else {
-                            // Mảng giá trị đơn giản
                             csvSections.push('value')
                             value.forEach(v => {
                                 csvSections.push(`"${String(v).replace(/"/g, '""')}"`)
                             })
                         }
-                        // Thêm dòng trống sau mỗi bảng
                         csvSections.push('')
                     }
                 }
-                // Sau khi xuất các bảng dữ liệu gốc, thêm 2 bảng thống kê
-                // 1. Bảng kết quả ma trận tiêu chí
                 const criterios = this.$store.getters.currentCriteriosLabelSegunda || [];
                 const pesosCriterios = (this.$store.getters.currentMatrizSegunda?.length > 0)
                   ? this.$store.getters.currentMatrizSegunda[this.$store.getters.currentMatrizSegunda.length-1].pesos
@@ -255,9 +232,7 @@ export default {
                   csvSections.push(pesosCriterios.map(x => x.toFixed(6)).join(','));
                   csvSections.push('');
                 }
-                // 2. Bảng kết quả phương án
                 const options = this.$store.getters.currentOptionsLabelSegunda || [];
-                // Tính tổng điểm phương án như hàm resultadoFinal
                 let tongDiem = [];
                 try {
                   const matrizPrimeira = this.$store.getters.currentMatrizPrimeira;
@@ -286,7 +261,6 @@ export default {
                     for (let index = 0; index < pesos[0].length; index++) {
                       tongDiem.push(somaColuna(index));
                     }
-                    // Cắt đúng số phương án
                     tongDiem = tongDiem.slice(0, options.length);
                   }
                 } catch (e) {}
@@ -308,7 +282,6 @@ export default {
                 const writable = await fileHandle.createWritable()
                 await writable.write(new Blob([csvContent], { type: 'text/csv' }))
                 await writable.close()
-                // Lưu lên API như cũ
                 try {
                     const response = await fetch('https://api-ahp.onrender.com/api/projects', {
                         method: 'POST',

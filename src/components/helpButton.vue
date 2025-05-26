@@ -3,19 +3,16 @@
     <div class="menu-container">
         <input type="checkbox" id="checkbox-show-menu" class="checkbox-with-label" v-model="menuState">
         <div class="menu-itens-container" v-if="menuState">
-            <!-- ESCALA SAAATY -->
             <label class="label-menu-ahp" for="checkbox-mostra-escala-saaty" v-if="tabView !== 'resultados'">
                 {{ $t('helpEscalaSaaty') }}
             </label>
             <input type="checkbox" class="checkbox-menu-ahp" id="checkbox-mostra-escala-saaty" v-model="mostrarEscala">
             <vueEscalaSaaty class="escala" v-if="mostrarEscala" />
-            <!-- PASSO A PASSO AHP -->
             <label class="label-menu-ahp" for="button-calculos-ahp">
                 {{ $t('helpCalculosAhp') }}
             </label>
             <button class="button-menu-ahp" id="button-calculos-ahp" @click="abrirPopUp('passosAhp')">
             </button>
-            <!-- MAIS SOBRE AHP-->
             <label class="label-menu-ahp" for="button-mais-sobre-ahp" v-if="menuState">
                 {{ $t('helpMaisSobreAhp') }}
             </label>

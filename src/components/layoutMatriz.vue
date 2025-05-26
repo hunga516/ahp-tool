@@ -3,7 +3,6 @@
     <div>
         <table class="matriz" :name="idMatriz" :ref="idMatriz">
             <tbody>
-                <!-- Linha de título -->
                 <tr class="linha-titulo">
                     <th></th>
                     <th class="th-titulo-linha" v-for="(item, optionIndex) in optionMatriz" :key="optionIndex">
@@ -36,17 +35,17 @@ export default {
             default: ""
         },
         optionMatriz: {
-            type: Array, // Define o tipo esperado como um array
-            default: () => [] // Define um valor padrão como um array vazio
+            type: Array,
+            default: () => []
         },
         valueMatriz: {
-            type: Array, // Define o tipo esperado como um array
+            type: Array,
             default: () => [
                 [1, 1, 1, 1],
                 [1, 1, 1, 1],
                 [1, 1, 1, 1],
                 [1, 1, 1, 1]
-            ] // Define um valor padrão como um array vazio
+            ]  
         }
     }
 }

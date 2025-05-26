@@ -144,11 +144,9 @@ export default {
         resultadoFinal() {
             const primeira = this.matrizPrimeira
             const segunda = this.matrizSegunda
-            // console.log(segunda)
             const multiplicaPeso = (index) => {
                 const vetor = []
                 for (let j = 0; j < segunda[index].length; j++) {
-                    // console.log(segunda[segunda.length - 1]["pesos"][i])
                     vetor.push(
                         segunda[segunda.length - 1]["pesos"][index] * primeira[index][primeira[index].length - 1]["pesos"][j]
                     )
@@ -170,7 +168,6 @@ export default {
             for (let index = 0; index < pesos[0].length; index++) {
                 resultado.push(somaColuna(index))
             }
-            // A linha de código abaixo é explicitamente uma gambiarra
             resultado.splice(this.optionsSegunda.length)
 
             return resultado

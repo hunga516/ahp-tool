@@ -39,7 +39,6 @@ export default{
             })
         },
         tdMatrizCoordenada(numero, numColunas) {
-            // console.log(numero)
             let contador = 0
             for (let i = 1; i <= numColunas; i++) {
                 for (let j = 1; j <= numColunas; j++) {
@@ -92,7 +91,6 @@ export default{
             const tamanho = chamada === "primeira" ? this.optionsPrimeira.length : this.criteriosSegunda.length
             const sliderIndex = Number(value[3].split("-")[2]) - 1
 
-            //matriz atual é uma computed em primeiraEtapa.vue e segundaEtapa.vue
             const matriz = document.getElementsByName(`${this.matrizAtual}`)[0]
 
             const position = this.tdMatrizCoordenada(sliderIndex, tamanho)
@@ -104,7 +102,6 @@ export default{
             const slider = document.getElementsByName(value[3])[0]
 
             slider.addEventListener("input", () => {
-                // Define a cor vermelha enquanto o slider está sendo movido.
                 td[0].style.boxShadow = "0 0 20px var(--cor-tema)"
                 td[0].style.transform = "scale(1.02)"
                 td[1].style.boxShadow = "0 0 20px var(--cor-tema)"

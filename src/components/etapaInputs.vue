@@ -351,12 +351,10 @@ export default {
                 this.criteriosSimboloPrimeira = this.currentCriteriosSimboloPrimeira
             }
             try {
-                // Labels
                 this.$store.dispatch("changeCriteriosLabelPrimeira", this.criteriosLabelPrimeira)
                 this.$store.dispatch("changeCriteriosLabelSegunda", this.criteriosLabelPrimeira)
                 this.$store.dispatch("changeOptionsLabelPrimeira", this.optionsLabelPrimeira)
                 this.$store.dispatch("changeOptionsLabelSegunda", this.optionsLabelPrimeira)
-                // Simbolos
                 this.$store.dispatch("changeCriteriosSimboloPrimeira", this.criteriosSimboloPrimeira)
                 this.$store.dispatch("changeCriteriosSimboloSegunda", this.criteriosSimboloPrimeira)
                 this.$store.dispatch("changeOptionsSimboloPrimeira", this.optionsSimboloPrimeira)
@@ -365,7 +363,6 @@ export default {
                 console.log("falha no armazenamento", error)
             }
         },
-        // IMPEDE QUE O TEXTO DO LABEL DAS OPÇÕES OU CRITÉRIOS SEJAM BRANCOS
         checkBlankText(arrayName, index, prefix) {
             if (this[arrayName][index].trim() === "") {
                 this[arrayName][index] = prefix + (index + 1)
@@ -474,20 +471,17 @@ export default {
             try {
                 this.$store.dispatch("changeImportFlag", true);
                 
-                // Cập nhật dữ liệu từ project
                 Object.keys(project).forEach(key => {
                     if (key !== '_id' && key !== 'timestamp') {
                         this.$store.dispatch(`change${key.charAt(0).toUpperCase() + key.slice(1)}`, project[key]);
                     }
                 });
 
-                // Cập nhật local state
                 this.optionsLabelPrimeira = project.optionsLabelPrimeira;
                 this.optionsSimboloPrimeira = project.optionsSimboloPrimeira;
                 this.criteriosLabelPrimeira = project.criteriosLabelPrimeira;
                 this.criteriosSimboloPrimeira = project.criteriosSimboloPrimeira;
 
-                // Emit sự kiện cập nhật view
                 this.$emit("update-view");
                 
                 alert('Dữ liệu đã được nhập thành công!');
@@ -503,24 +497,19 @@ export default {
             }
         },
         applySelectedLocations() {
-            // Lấy tên các khu vực đã chọn
             const names = this.selectedLocationObjects.map(item => item.khu_vuc);
-            // Gán cho phương án, nếu ít hơn 4 thì bổ sung tên mặc định
             this.optionsLabelPrimeira = [
                 ...names,
                 ...Array(4 - names.length).fill('').map((_, i) => `Phương án ${names.length + i + 1}`)
             ].slice(0, 4);
             this.optionsSimboloPrimeira = this.optionsLabelPrimeira.map((_, idx) => `O${idx + 1}`);
-            // Lưu lại vào store
             this.$store.dispatch("changeOptionsLabelPrimeira", this.optionsLabelPrimeira);
             this.$store.dispatch("changeOptionsSimboloPrimeira", this.optionsSimboloPrimeira);
         },
-        // Khi thay đổi tên viết tắt phương án
         onChangeOptionSimboloPrimeira() {
             this.$store.dispatch("changeOptionsSimboloPrimeira", this.optionsSimboloPrimeira)
             this.$store.dispatch("changeOptionsSimboloSegunda", this.optionsSimboloPrimeira)
         },
-        // Khi thay đổi tên phương án
         onChangeOptionLabelPrimeira() {
             this.$store.dispatch("changeOptionsLabelPrimeira", this.optionsLabelPrimeira)
             this.$store.dispatch("changeOptionsLabelSegunda", this.optionsLabelPrimeira)
@@ -535,11 +524,9 @@ export default {
             if (newVal.length > 0) {
                 this.optionsLabelPrimeira = [...this.selectedLocationObjects.map(item => item.khu_vuc)];
                 this.optionsSimboloPrimeira = this.selectedLocationObjects.map((item, idx) => `O${idx + 1}`);
-                // Lưu lại tên phương án vào store khi chọn khu vực
                 this.$store.dispatch("changeOptionsLabelPrimeira", this.optionsLabelPrimeira)
                 this.$store.dispatch("changeOptionsSimboloPrimeira", this.optionsSimboloPrimeira)
             } else {
-                // Ưu tiên lấy từ store nếu có
                 if (this.currentOptionsLabelPrimeira.length > 0) {
                     this.optionsLabelPrimeira = this.currentOptionsLabelPrimeira;
                 } else {
@@ -564,7 +551,6 @@ export default {
         },
         locationData() {
             if (this.selectedLocations.length === 0) {
-                // Ưu tiên lấy từ store nếu có
                 if (this.currentOptionsLabelPrimeira.length > 0) {
                     this.optionsLabelPrimeira = this.currentOptionsLabelPrimeira;
                 } else {
