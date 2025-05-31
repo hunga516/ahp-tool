@@ -14,6 +14,9 @@
         <button v-if="tabView == '/resultados'" @click="exportObjectAsJSON()" class="project-button">
             {{ $t("exportProject") }}
         </button>
+        <button v-if="tabView == '/resultados'" @click="$emit('export-pdf')" class="project-button">
+            Xuất PDF
+        </button>
     </div>
 
 
@@ -28,7 +31,7 @@ export default {
     mixins: [
         saveProjectMixin
     ],
-    emits: ["update-view"],
+    emits: ["update-view", "export-pdf"],
     data() {
         return {
             project: {}
@@ -59,7 +62,7 @@ export default {
 
                 const file = await fileHandle.getFile()
                 if (file.size > 5 * 1024 * 1024) {
-                    throw new Error("Arquivo muito grande (máximo 5MB)")
+                    throw new Error("Tệp quá lớn (tối đa 5MB)")
                 }
                 const fileContent = await file.text()
                 let parsed
@@ -70,10 +73,11 @@ export default {
                     let currentKey = null
                     let headers = []
                     let rows = []
+                    let isJsonField = false
                     for (let i = 0; i < lines.length; i++) {
                         const line = lines[i].trim()
                         if (line.startsWith('# ')) {
-                            if (currentKey && headers.length > 0) {
+                            if (currentKey && headers.length > 0 && !isJsonField) {
                                 if (headers.length === 1 && headers[0] === 'value') {
                                     result[currentKey] = rows.map(r => r[0])
                                 } else {
@@ -94,9 +98,22 @@ export default {
                             currentKey = line.slice(2).trim()
                             headers = []
                             rows = []
-                        } else if (line && !headers.length) {
+                            isJsonField = false
+                            // Nếu dòng tiếp theo là 'json', đánh dấu trường này là json
+                            if (lines[i+1] && lines[i+1].trim() === 'json') {
+                                isJsonField = true
+                                // Lấy dòng sau 'json' làm dữ liệu
+                                const jsonLine = lines[i+2] ? lines[i+2].trim() : ''
+                                try {
+                                    result[currentKey] = JSON.parse(jsonLine)
+                                } catch (e) {
+                                    result[currentKey] = []
+                                }
+                                i += 2 // Bỏ qua dòng 'json' và dòng dữ liệu
+                            }
+                        } else if (!isJsonField && line && !headers.length) {
                             headers = line.split(',')
-                        } else if (line && headers.length) {
+                        } else if (!isJsonField && line && headers.length) {
                             let row = []
                             let inQuotes = false
                             let cell = ''
@@ -116,7 +133,7 @@ export default {
                             rows.push(row)
                         }
                     }
-                    if (currentKey && headers.length > 0) {
+                    if (currentKey && headers.length > 0 && !isJsonField) {
                         if (headers.length === 1 && headers[0] === 'value') {
                             result[currentKey] = rows.map(r => r[0].replace(/^"|"$/g, '').replace(/""/g, '"'))
                         } else {
@@ -139,58 +156,124 @@ export default {
                     parsed = JSON.parse(fileContent)
                 }
 
-                if (!parsed || typeof parsed !== "object") {
-                    throw new Error("Formato inválido")
-                }
-
-                const requiredProps = ["slideresPrimeira", "criteriosLabelPrimeira", "optionsLabelPrimeira"]
-                requiredProps.forEach(prop => {
+                const requiredProps = [
+                    "slideresPrimeira", "slideresSegunda",
+                    "criteriosLabelPrimeira", "criteriosLabelSegunda",
+                    "optionsLabelPrimeira", "optionsLabelSegunda",
+                    "criteriosSimboloPrimeira", "criteriosSimboloSegunda",
+                    "optionsSimboloPrimeira", "optionsSimboloSegunda",
+                    "matrizPrimeira", "matrizSegunda"
+                ]
+                for (const prop of requiredProps) {
                     if (!(prop in parsed)) {
-                        if (prop === 'slideresPrimeira') {
-                            alert('Cấu trúc file không hợp lệ hoặc thiếu dữ liệu. Số phương án phải lớn hơn 3.');
-                        } else if (prop === 'criteriosLabelPrimeira') {
-                            alert('Cấu trúc file không hợp lệ hoặc thiếu dữ liệu. Số tiêu chí phải lớn hơn 3.');
-                        } else if (prop === 'optionsLabelPrimeira') {
-                            alert('Cấu trúc file không hợp lệ hoặc thiếu dữ liệu. Số phương án phải lớn hơn 3.');
-                        } else {
-                            alert('Cấu trúc file không hợp lệ hoặc thiếu dữ liệu.');
-                        }
-                        throw new Error('Cấu trúc file không hợp lệ hoặc thiếu dữ liệu.');
+                        alert(`Thiếu trường dữ liệu bắt buộc: ${prop}`)
+                        throw new Error(`Thiếu trường dữ liệu bắt buộc: ${prop}`)
                     }
-                })
+                }
 
                 const numCriterios = Array.isArray(parsed.criteriosLabelPrimeira) ? parsed.criteriosLabelPrimeira.length : 0;
                 const numOptions = Array.isArray(parsed.optionsLabelPrimeira) ? parsed.optionsLabelPrimeira.length : 0;
                 if (numCriterios < 4 || numCriterios > 9) {
                     alert('Số lượng tiêu chí phải từ 4 đến 9!');
-                    return null;
+                    throw new Error('Số lượng tiêu chí phải từ 4 đến 9!');
                 }
                 if (numOptions < 4 || numOptions > 5) {
                     alert('Số lượng phương án phải từ 4 đến 5!');
-                    return null;
+                    throw new Error('Số lượng phương án phải từ 4 đến 5!');
                 }
 
                 console.log("Importação bem-sucedida:", parsed)
+                // Parse lại các trường nếu là JSON string, hoặc nếu là mảng string thì map về số
+                const jsonFields = [
+                    'slideresPrimeira', 'slideresSegunda',
+                    'matrizPrimeira', 'matrizSegunda'
+                ]
+                for (const field of jsonFields) {
+                    if (typeof parsed[field] === 'string' && (parsed[field].startsWith('[') || parsed[field].startsWith('{'))) {
+                        try {
+                            parsed[field] = JSON.parse(parsed[field])
+                        } catch (e) {}
+                    }
+                    // Nếu là mảng string, map về số
+                    if (Array.isArray(parsed[field]) && parsed[field].every(x => typeof x === 'string' && !isNaN(x))) {
+                        parsed[field] = parsed[field].map(Number)
+                    }
+                }
+                // Làm sạch dấu ngoặc kép cho các trường text
+                const cleanTextFields = [
+                    'criteriosLabelPrimeira', 'criteriosLabelSegunda',
+                    'optionsLabelPrimeira', 'optionsLabelSegunda',
+                    'criteriosSimboloPrimeira', 'criteriosSimboloSegunda',
+                    'optionsSimboloPrimeira', 'optionsSimboloSegunda'
+                ]
+                for (const field of cleanTextFields) {
+                    if (Array.isArray(parsed[field])) {
+                        parsed[field] = parsed[field].map(x =>
+                            typeof x === 'string'
+                                ? x.replace(/^"+|"+$/g, '').replace(/""/g, '"')
+                                : x
+                        )
+                    }
+                }
+                // Đồng bộ Simbolo nếu rỗng hoặc thiếu
+                const labelSimboloPairs = [
+                  ['criteriosLabelPrimeira', 'criteriosSimboloPrimeira'],
+                  ['criteriosLabelSegunda', 'criteriosSimboloSegunda'],
+                  ['optionsLabelPrimeira', 'optionsSimboloPrimeira'],
+                  ['optionsLabelSegunda', 'optionsSimboloSegunda']
+                ];
+                for (const [labelField, simboloField] of labelSimboloPairs) {
+                  if (!Array.isArray(parsed[simboloField]) || parsed[simboloField].length === 0) {
+                    parsed[simboloField] = [...parsed[labelField]];
+                  }
+                }
                 return parsed
 
             } catch (error) {
+                this.resetProject()
                 if (error.name === "AbortError") {
-                    console.log("Importação cancelada pelo usuário")
+                    console.log("Import bị hủy bởi người dùng")
                 } else {
-                    console.error("Falha na importação:", error)
-                    alert(`Erro: ${error.message}`)
+                    alert(`Lỗi khi nhập dự án: ${error.message}`)
                 }
                 return null
             }
         },
         async exportObjectAsJSON() {
             try {
-                await this.saveProject()
-                const projectData = JSON.parse(verificarLocal("last_project"))
-                if (!projectData) throw new Error("Không có dữ liệu để xuất")
+                const projectData = {
+                    slideresPrimeira: this.$store.getters.currentSlideresPrimeira,
+                    slideresSegunda: this.$store.getters.currentSlideresSegunda,
+                    criteriosLabelPrimeira: this.$store.getters.currentCriteriosLabelPrimeira,
+                    criteriosLabelSegunda: this.$store.getters.currentCriteriosLabelSegunda,
+                    optionsLabelPrimeira: this.$store.getters.currentOptionsLabelPrimeira,
+                    optionsLabelSegunda: this.$store.getters.currentOptionsLabelSegunda,
+                    criteriosSimboloPrimeira: this.$store.getters.currentCriteriosSimboloPrimeira,
+                    criteriosSimboloSegunda: this.$store.getters.currentCriteriosSimboloSegunda,
+                    optionsSimboloPrimeira: this.$store.getters.currentOptionsSimboloPrimeira,
+                    optionsSimboloSegunda: this.$store.getters.currentOptionsSimboloSegunda,
+                    matrizPrimeira: this.$store.getters.currentMatrizPrimeira,
+                    matrizSegunda: this.$store.getters.currentMatrizSegunda
+                }
 
+                for (const [key, value] of Object.entries(projectData)) {
+                    if (!value) {
+                        alert(`Thiếu dữ liệu: ${key}`)
+                        throw new Error(`Thiếu dữ liệu: ${key}`)
+                    }
+                }
+
+                await this.saveProject()
                 let csvSections = []
                 for (const [key, value] of Object.entries(projectData)) {
+                    // Nếu là trường phức tạp (matrizPrimeira, matrizSegunda, slideresPrimeira, slideresSegunda), stringify
+                    if (key === 'matrizPrimeira' || key === 'matrizSegunda' || key === 'slideresPrimeira' || key === 'slideresSegunda') {
+                        csvSections.push(`# ${key}`)
+                        csvSections.push('json')
+                        csvSections.push(JSON.stringify(value))
+                        csvSections.push('')
+                        continue
+                    }
                     if (Array.isArray(value)) {
                         csvSections.push(`# ${key}`)
                         if (value.length > 0 && typeof value[0] === 'object' && value[0] !== null) {
@@ -304,8 +387,7 @@ export default {
                 console.log("Xuất file CSV thành công:", fileName)
             } catch (error) {
                 if (error.name !== "AbortError") {
-                    console.error("Erro na exportação:", error)
-                    alert(`Erro ao exportar projeto: ${error.message}`)
+                    alert(`Lỗi khi xuất dự án: ${error.message}`)
                 }
             }
         },

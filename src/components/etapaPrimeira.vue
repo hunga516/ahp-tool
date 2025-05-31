@@ -105,6 +105,20 @@ export default {
     updated() {
         this.saveProject()
     },
+    watch: {
+        criteriosPrimeira: {
+            handler(newLabels) {
+                for (let i = 0; i < this.sliderStore.length; i++) {
+                    for (let j = 0; j < this.sliderStore[i].length; j++) {
+                        if (this.sliderStore[i][j] && newLabels[i] && this.sliderStore[i][j].texto !== newLabels[i]) {
+                            this.sliderStore[i][j].texto = newLabels[i]
+                        }
+                    }
+                }
+            },
+            immediate: true
+        }
+    },
     methods: {
         trocaMatrizInputAtual(matrizName) {
             this.$store.dispatch("changeMatrizInputAtual", matrizName)
