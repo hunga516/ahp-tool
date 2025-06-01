@@ -2,6 +2,9 @@
     <vueMenuAhp />
 
     <section class="min-h-[600px] w-full bg-gray-50 p-8" ref="pdfContent">
+        <div class="no-print flex gap-2 mb-4">
+            <vueButtonProjectControl @export-pdf="exportToPDF" />
+        </div>
         <div class="container-card max-w-7xl mx-auto mb-8 animate-fade-in mt-20">
             
             <h3 class="text-xl font-semibold text-black text-center mb-6">
@@ -107,8 +110,6 @@
                 </tr>
             </table>
         </div>
-
-        <vueButtonProjectControl @export-pdf="exportToPDF" />
     </section>
 </template>
 <script>
@@ -178,11 +179,14 @@ export default {
             // Sử dụng html2pdf để xuất toàn bộ section kết quả
             const element = this.$refs.pdfContent;
             const opt = {
-                margin:       0.3,
-                filename:     'AHP_KetQua.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+                margin: 0.3,
+                filename: 'AHP_KetQua.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: {
+                    scale: 4,
+                    ignoreElements: (el) => el.classList && el.classList.contains('no-print')
+                },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
             };
             html2pdf().set(opt).from(element).save();
         }
@@ -204,5 +208,94 @@ export default {
 
 .animate-fade-in {
     animation: fade-in 0.5s ease-out;
+}
+
+.container-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    padding: 2.5rem 2rem 2rem 2rem;
+    margin-bottom: 2.5rem;
+    border: 1px solid #e5e7eb;
+}
+
+.table-custom {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fafbfc;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    margin-bottom: 2rem;
+}
+
+.table-header {
+    padding: 1rem 1.5rem;
+    background: #f3f4f6;
+    color: #222;
+    font-weight: 600;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 1rem;
+}
+
+.table-cell {
+    padding: 0.85rem 1.5rem;
+    background: #fff;
+    border-bottom: 1px solid #f1f1f1;
+    font-size: 1rem;
+    color: #333;
+}
+
+.table-custom tr:last-child .table-cell {
+    border-bottom: none;
+}
+
+@media (max-width: 900px) {
+    .container-card {
+        padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+    }
+    .table-header, .table-cell {
+        padding: 0.6rem 0.5rem;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .container-card {
+        padding: 0.5rem 0.2rem 0.5rem 0.2rem;
+    }
+    .table-header, .table-cell {
+        padding: 0.4rem 0.2rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    body, .container-card, .table-custom {
+        background: #fff !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+        color: #111 !important;
+    }
+    .container-card, .table-custom {
+        border: 2px solid #222 !important;
+    }
+    .table-header, .table-cell {
+        color: #111 !important;
+        background: #fff !important;
+        border-bottom: 2px solid #222 !important;
+        font-weight: 700 !important;
+        font-size: 1.15rem !important;
+        padding: 0.7rem 0.7rem !important;
+    }
+    .table-header {
+        background: #f2f2f2 !important;
+    }
 }
 </style>

@@ -188,7 +188,8 @@
                         <input class="input-short" v-model="criteriosSimboloPrimeira[index]" maxlength="5"
                             @blur="checkBlankText('criteriosSimboloPrimeira', index, 'C')">
                         <input class="input-long" v-model="criteriosLabelPrimeira[index]" maxlength="20"
-                            @blur="checkBlankText('criteriosLabelPrimeira', index, 'Criterion-')">
+                            @blur="checkBlankText('criteriosLabelPrimeira', index, 'Criterion-')"
+                            @input="onChangeCriterioLabelPrimeira">
                         <div class="button-group">
                             <button @click="removeCriterio(index)" class="action-button remove-btn" tabindex="-1">
                                 <span>-</span>
@@ -372,6 +373,7 @@ export default {
             if (this.criteriosLabelPrimeira.length < 9) {
                 this.criteriosLabelPrimeira.push(`Criterion-${this.criteriosLabelPrimeira.length + 1}`)
                 this.criteriosSimboloPrimeira.push(`C${this.criteriosSimboloPrimeira.length + 1}`)
+                this.criaSlideres();
             } else {
                 window.alert("Bạn đã đạt đến giới hạn số lượng tiêu chí cho phép!")
             }
@@ -380,6 +382,7 @@ export default {
             if (this.criteriosLabelPrimeira.length > 3) {
                 this.criteriosLabelPrimeira.splice(index, 1)
                 this.criteriosSimboloPrimeira.splice(index, 1)
+                this.criaSlideres();
             } else {
                 window.alert("Bạn phải có ít nhất 3 tiêu chí để phân tích!")
             }
@@ -513,6 +516,11 @@ export default {
         onChangeOptionLabelPrimeira() {
             this.$store.dispatch("changeOptionsLabelPrimeira", this.optionsLabelPrimeira)
             this.$store.dispatch("changeOptionsLabelSegunda", this.optionsLabelPrimeira)
+            this.criaSlideres();
+        },
+        onChangeCriterioLabelPrimeira() {
+            this.$store.dispatch("changeCriteriosLabelPrimeira", this.criteriosLabelPrimeira)
+            this.$store.dispatch("changeCriteriosLabelSegunda", this.criteriosLabelPrimeira)
             this.criaSlideres();
         },
     },
