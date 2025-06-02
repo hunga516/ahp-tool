@@ -7,21 +7,29 @@
             </h3>
         </div>
 
-        <input type="range" min="0" max="100" :step="12.5" v-model="valorInput" :id="id" :class="classe" ref="slider"
+        <input type="range" min="0" max="100" :step="6.25" v-model="valorInput" :id="id" :class="classe" ref="slider"
             :name="name" @input="handleInput">
         <div class="span-container">
             <div class="left-span-container">
-                <span class="slider-span" id="slider-span-19" draggable="false">1/9</span>
-                <span class="slider-span" id="slider-span-17" draggable="false">1/7</span>
-                <span class="slider-span" id="slider-span-15" draggable="false">1/5</span>
-                <span class="slider-span" id="slider-span-13" draggable="false">1/3</span>
+                <span class="slider-span">1/9</span>
+                <span class="slider-span">1/8</span>
+                <span class="slider-span">1/7</span>
+                <span class="slider-span">1/6</span>
+                <span class="slider-span">1/5</span>
+                <span class="slider-span">1/4</span>
+                <span class="slider-span">1/3</span>
+                <span class="slider-span">1/2</span>
             </div>
             <div class="right-span-container">
-                <span class="slider-span" id="slider-span-1" draggable="false">1</span>
-                <span class="slider-span" id="slider-span-3" draggable="false">3</span>
-                <span class="slider-span" id="slider-span-5" draggable="false">5</span>
-                <span class="slider-span" id="slider-span-7" draggable="false">7</span>
-                <span class="slider-span" id="slider-span-9" draggable="false">9</span>
+                <span class="slider-span">1</span>
+                <span class="slider-span">2</span>
+                <span class="slider-span">3</span>
+                <span class="slider-span">4</span>
+                <span class="slider-span">5</span>
+                <span class="slider-span">6</span>
+                <span class="slider-span">7</span>
+                <span class="slider-span">8</span>
+                <span class="slider-span">9</span>
             </div>
         </div>
 
@@ -105,16 +113,24 @@ export default {
 
         handleInput() {
             const value = Number(this.valorInput);
-            const values = [0, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 100];
+            const values = [0, 6.25, 12.5, 18.75, 25, 31.25, 37.5, 43.75, 50, 56.25, 62.5, 68.75, 75, 81.25, 87.5, 93.75, 100];
             const mappedValues = {
                 0: '1/9',
+                6.25: '1/8',
                 12.5: '1/7',
+                18.75: '1/6',
                 25: '1/5',
+                31.25: '1/4',
                 37.5: '1/3',
+                43.75: '1/2',
                 50: '1',
+                56.25: '2',
                 62.5: '3',
+                68.75: '4',
                 75: '5',
+                81.25: '6',
                 87.5: '7',
+                93.75: '8',
                 100: '9'
             };
 

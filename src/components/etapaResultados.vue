@@ -179,11 +179,10 @@ export default {
             // Sử dụng html2pdf để xuất toàn bộ section kết quả
             const element = this.$refs.pdfContent;
             const opt = {
-                margin: 0.3,
                 filename: 'AHP_KetQua.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
+                image: { type: 'jpeg', quality: 1 },
                 html2canvas: {
-                    scale: 4,
+                    scale: 1.5,
                     ignoreElements: (el) => el.classList && el.classList.contains('no-print')
                 },
                 jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
